@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="bn"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Supplier Collector</title><meta name="theme-color" content="#1f2d3d">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1f2d3d;--mut:#5d6b7a;--bg:#f4f6f7;--card:#fff;--line:#d5dbe0;--tape:#e0a100;--ok:#16794c;--err:#b3261e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
+header{background:var(--ink);color:#fff;padding:14px 20px;border-bottom:4px solid var(--tape);position:sticky;top:0;z-index:5}
+header h1{margin:0;font-size:18px}
+nav{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+nav button{background:transparent;color:#cfd8e0;border:1px solid #4a5b6d;border-radius:6px;padding:6px 14px;font:inherit;cursor:pointer}
+nav button.on{background:var(--tape);color:#1f2d3d;border-color:var(--tape);font-weight:600}
+main{max-width:860px;margin:0 auto;padding:16px}
+section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:14px}
+section h2{font-size:16px;margin:0 0 10px;padding-left:10px;border-left:4px solid var(--tape)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.fld.wide{grid-column:1/-1}
+label.l{display:block;font-weight:600;font-size:14px;margin-bottom:4px}
+.req{color:var(--err)}.star{color:var(--tape)}
+input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
+textarea{min-height:70px;resize:vertical}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--tape);outline-offset:1px}
+.opts{display:flex;flex-wrap:wrap;gap:6px 16px}.opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
+.btn{background:var(--ink);color:#fff;border:0;border-radius:6px;padding:11px 22px;font:inherit;font-weight:600;cursor:pointer}
+.btn.alt{background:#fff;color:var(--ink);border:1px solid var(--ink)}
+.msg{margin-left:12px;font-weight:600}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)}
+.row button{background:none;border:0;color:var(--err);cursor:pointer;font:inherit}
+.note{color:var(--mut);font-size:14px}
+</style></head><body>
+<header><h1>Supplier Collector</h1><nav id="nav"></nav></header>
+<main id="app"></main>
+<script>
+let S, tab="supplier";
+const $=(h)=>{const d=document.createElement("div");d.innerHTML=h.trim();return d.firstChild};
+const today=()=>new Date().toISOString().slice(0,10);
+async function api(url,opt){const r=await fetch(url,opt);const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||"Error");return j}
+async function load(){S=await api("/api/schema");render()}
+function render(){
+  const nav=document.getElementById("nav");nav.innerHTML="";
+  [...Object.keys(S.forms).map(k=>[k,S.forms[k].title.split(" / ")[0]]),["admin","Fields (add / remove)"]].forEach(([k,t])=>{
+    const b=document.createElement("button");b.textContent=t;b.className=k===tab?"on":"";b.onclick=()=>{tab=k;render()};nav.appendChild(b)});
+  tab==="admin"?renderAdmin():renderForm(tab);
+}
+function fieldEl(f){
+  const lab=`<label class="l">${f.star?'<span class="star">★</span> ':""}${f.label}${f.required?' <span class="req">*</span>':""}</label>`;
+  let inp="";
+  if(f.type==="textarea")inp=`<textarea name="${f.key}"></textarea>`;
+  else if(f.type==="select")inp=`<select name="${f.key}"><option value=""></option>${f.options.map(o=>`<option>${o}</option>`).join("")}</select>`;
+  else if(f.type==="radio"||f.type==="checkbox")inp=`<div class="opts">${f.options.map(o=>`<label><input type="${f.type}" name="${f.key}" value="${o}"> ${o}</label>`).join("")}</div>`;
+  else inp=`<input type="${["phone","whatsapp"].includes(f.key)?"tel":f.type}" name="${f.key}" ${f.today?`value="${today()}"`:""}>`;
+  const wide=f.type==="textarea"||f.type==="checkbox"||f.options&&f.options.join("").length>40;
+  return `<div class="fld ${wide?"wide":""}">${lab}${inp}</div>`;
+}
+function renderForm(id){
+  const F=S.forms[id],app=document.getElementById("app");
+  app.innerHTML=`<form id="f">${F.sections.map(s=>`<section><h2>${s.title}</h2><div class="grid">${s.fields.map(fieldEl).join("")}</div></section>`).join("")}
+  <button class="btn" type="submit">Save to Excel</button><span id="m" class="msg"></span></form>`;
+  document.getElementById("f").onsubmit=async e=>{
+    e.preventDefault();const m=document.getElementById("m"),data={};
+    F.sections.forEach(s=>s.fields.forEach(f=>{
+      const els=[...e.target.querySelectorAll(`[name="${f.key}"]`)];
+      data[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
+        :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0].value}));
+    try{await api("/api/submit/"+id,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
+      m.textContent="Saved ✓";m.className="msg ok";e.target.reset();
+      e.target.querySelectorAll('input[type=date]').forEach(d=>d.value=today());scrollTo(0,0)}
+    catch(x){m.textContent=x.message;m.className="msg err"}}
+}
+function renderAdmin(){
+  const forms=Object.keys(S.forms),app=document.getElementById("app");
+  app.innerHTML=`<section><h2>Add a new field</h2><p class="note">Field add korle form-e dekhabe ar Excel-e notun column auto toiri hobe.</p>
+  <div class="grid">
+   <div><label class="l">Form</label><select id="af">${forms.map(k=>`<option value="${k}">${S.forms[k].title}</option>`).join("")}</select></div>
+   <div><label class="l">Section</label><select id="as"></select></div>
+   <div class="fld wide"><label class="l">Label (question / field name)</label><input type="text" id="al"></div>
+   <div><label class="l">Type</label><select id="at"><option value="text">Short text</option><option value="textarea">Long text</option><option value="number">Number</option><option value="date">Date</option><option value="radio">Single choice</option><option value="checkbox">Multiple choice</option><option value="select">Dropdown</option></select></div>
+   <div><label class="l">Options (comma diye)</label><input type="text" id="ao" placeholder="Yes, No"></div>
+   <div class="opts"><label><input type="checkbox" id="ar"> Required</label><label><input type="checkbox" id="as2"> ★ First visit</label></div>
+  </div><p><button class="btn" id="add">Add field</button><span id="m" class="msg"></span></p></section>
+  <section><h2>Current fields</h2><div id="list"></div></section>
+  <a class="btn alt" href="/api/download" style="text-decoration:none;display:inline-block">Download Excel</a>`;
+  const af=document.getElementById("af"),as=document.getElementById("as");
+  const secs=()=>{as.innerHTML=S.forms[af.value].sections.map((s,i)=>`<option value="${i}">${s.title}</option>`).join("");list()};
+  const list=()=>{document.getElementById("list").innerHTML=S.forms[af.value].sections.map(s=>
+    `<b>${s.title}</b>`+s.fields.map(f=>`<div class="row"><span>${f.label} <span class="note">(${f.type})</span></span><button data-k="${f.key}">Remove</button></div>`).join("")).join("<br>");
+    document.querySelectorAll("#list button").forEach(b=>b.onclick=async()=>{
+      if(!confirm("Form theke remove hobe (Excel-er purono data thakbe)."))return;
+      await api(`/api/field/${af.value}/${b.dataset.k}`,{method:"DELETE"});await load2()})};
+  const load2=async()=>{S=await api("/api/schema");list()};
+  af.onchange=secs;secs();
+  document.getElementById("add").onclick=async()=>{
+    const m=document.getElementById("m");
+    try{const r=await api("/api/field",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      form:af.value,section:as.value,label:document.getElementById("al").value,type:document.getElementById("at").value,
+      options:document.getElementById("ao").value,required:document.getElementById("ar").checked,star:document.getElementById("as2").checked})});
+      m.textContent=r.warning||"Added ✓";m.className="msg ok";document.getElementById("al").value="";await load2()}
+    catch(x){m.textContent=x.message;m.className="msg err"}}
+}
+load();
+</script></body></html>

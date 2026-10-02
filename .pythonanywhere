@@ -1,0 +1,21 @@
+# PythonAnywhere Deployment Instructions
+
+## After uploading files:
+
+1. Go to "Web" tab
+2. Click "Add a new web app"
+3. Choose "Manual configuration"
+4. Select Python 3.10
+5. Set:
+   - Source code: /home/YOUR_USERNAME/supplier-collector
+   - Working directory: /home/YOUR_USERNAME/supplier-collector
+   - WSGI file: /home/YOUR_USERNAME/supplier-collector/wsgi.py
+6. In "Virtualenv" section - leave blank (we'll use system packages)
+7. Click "Reload" button
+
+## Install packages:
+Open Bash console and run:
+pip3.10 install --user flask openpyxl
+
+## Your app will be live at:
+https://YOUR_USERNAME.pythonanywhere.com

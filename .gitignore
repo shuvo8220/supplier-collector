@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+
+# Data files (will be created on server)
+data/
+*.xlsx
+*.jsonl
+
+# Environment
+.env
+venv/
+
+# Temp files
+=3.0
+=3.1

@@ -1,0 +1,517 @@
+{
+ "forms": {
+  "supplier": {
+   "title": "Supplier Onboarding & Interview / সাপ্লায়ার অনবোর্ডিং ও ইন্টারভিউ",
+   "sheet": "Suppliers",
+   "sections": [
+    {
+     "title": "Basic / সংগ্রহ",
+     "fields": [
+      {
+       "key": "date",
+       "label": "Date / তারিখ",
+       "type": "date",
+       "today": true
+      },
+      {
+       "key": "collected_by",
+       "label": "Collected by / সংগ্রহকারী",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "title": "1. Company / কোম্পানি",
+     "fields": [
+      {
+       "key": "company",
+       "label": "Company / Brand / কোম্পানির নাম",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "est_year",
+       "label": "Established year / কত সালে শুরু",
+       "type": "number"
+      },
+      {
+       "key": "business_type",
+       "label": "Business type",
+       "type": "radio",
+       "options": [
+        "Manufacturer",
+        "Trader",
+        "Both"
+       ],
+       "required": true
+      },
+      {
+       "key": "employees",
+       "label": "Employees / কর্মী",
+       "type": "radio",
+       "options": [
+        "1-10",
+        "11-50",
+        "51-200",
+        "200+"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "2. Contact / যোগাযোগ",
+     "fields": [
+      {
+       "key": "owner",
+       "label": "Owner name / মালিকের নাম",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "phone",
+       "label": "Phone / ফোন",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "whatsapp",
+       "label": "WhatsApp / হোয়াটসঅ্যাপ",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "handler",
+       "label": "Enquiry handler / ইনকোয়ারি কে দেখবেন",
+       "type": "text"
+      },
+      {
+       "key": "email_fb_web",
+       "label": "Email / FB / Website",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "title": "3. Location / ঠিকানা",
+     "fields": [
+      {
+       "key": "factory_addr",
+       "label": "Factory address / কারখানার ঠিকানা",
+       "type": "textarea",
+       "required": true
+      },
+      {
+       "key": "office_addr",
+       "label": "Office address / অফিসের ঠিকানা",
+       "type": "textarea"
+      },
+      {
+       "key": "factory_own",
+       "label": "Factory",
+       "type": "radio",
+       "options": [
+        "Own",
+        "Rented"
+       ]
+      },
+      {
+       "key": "delivery",
+       "label": "Delivery area",
+       "type": "checkbox",
+       "options": [
+        "Dhaka",
+        "Nationwide",
+        "Export"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "4. Products / প্রোডাক্ট",
+     "fields": [
+      {
+       "key": "subcat",
+       "label": "Sub-category / সাব-ক্যাটাগরি",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "main_products",
+       "label": "Main products / প্রধান প্রোডাক্ট",
+       "type": "textarea"
+      },
+      {
+       "key": "material",
+       "label": "Material / কাঁচামাল",
+       "type": "text"
+      },
+      {
+       "key": "custom",
+       "label": "Custom size / print",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No"
+       ]
+      },
+      {
+       "key": "sample",
+       "label": "Sample available",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "5. Commercial / ব্যবসায়িক তথ্য",
+     "fields": [
+      {
+       "key": "moq",
+       "label": "MOQ / সর্বনিম্ন অর্ডার",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "capacity",
+       "label": "Monthly capacity / মাসিক ক্ষমতা",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "lead_time",
+       "label": "Lead time (days) / ডেলিভারি সময়",
+       "type": "number"
+      },
+      {
+       "key": "price_list",
+       "label": "Price list",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "6. Verification / যাচাইকরণ (optional)",
+     "fields": [
+      {
+       "key": "trade_license",
+       "label": "Trade license / ট্রেড লাইসেন্স",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No"
+       ]
+      },
+      {
+       "key": "tin_bin",
+       "label": "TIN / BIN",
+       "type": "text"
+      },
+      {
+       "key": "bsti",
+       "label": "BSTI / certificate / ফুড প্যাকেজিংয়ে জরুরি",
+       "type": "text"
+      },
+      {
+       "key": "export_exp",
+       "label": "Export experience",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No",
+        "Ready"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "7. Media / ছবি ও ক্যাটালগ",
+     "fields": [
+      {
+       "key": "photo_product",
+       "label": "Product photos",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "Later"
+       ]
+      },
+      {
+       "key": "photo_factory",
+       "label": "Factory photo",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "Later"
+       ]
+      },
+      {
+       "key": "catalog",
+       "label": "Catalog / price list",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "Later"
+       ]
+      }
+     ]
+    },
+    {
+     "title": "8. Consent / সম্মতি",
+     "fields": [
+      {
+       "key": "consent",
+       "label": "Consent / সম্মতি",
+       "type": "checkbox",
+       "required": true,
+       "options": [
+        "আমার তথ্য ও ছবি প্ল্যাটফর্মে দেখাতে আমি রাজি।",
+        "প্ল্যাটফর্ম টিম আমার তথ্য যাচাই করতে পারবে।"
+       ]
+      },
+      {
+       "key": "signature",
+       "label": "Signature / স্বাক্ষর (নাম লিখুন)",
+       "type": "text",
+       "required": true
+      },
+      {
+       "key": "sign_date",
+       "label": "Date / তারিখ",
+       "type": "date",
+       "required": true,
+       "today": true
+      }
+     ]
+    },
+    {
+     "title": "9. Interview Questions / ইন্টারভিউ প্রশ্নাবলী",
+     "fields": []
+    },
+    {
+     "title": "A. Business / ব্যবসা",
+     "fields": [
+      {
+       "key": "q1",
+       "label": "1. বর্তমানে production capacity-এর কত % ব্যবহার হচ্ছে?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q2",
+       "label": "2. রিজেক্ট বা রিটার্ন হলে কী করেন?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q3",
+       "label": "3. বড় কোন কোন ক্রেতা বা কোম্পানিকে সাপ্লাই দিয়েছেন? (নাম না বললে ধরনটা)",
+       "type": "textarea",
+       "star": false
+      }
+     ]
+    },
+    {
+     "title": "B. Buyer Profile / ক্রেতা",
+     "fields": [
+      {
+       "key": "q4",
+       "label": "4. আপনাদের মূল buyer কারা? (Wholesaler / Distributor / Retailer / Factory / Corporate / Exporter)",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q5",
+       "label": "5. আপনারা নতুন buyer সাধারণত কীভাবে পান?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q6",
+       "label": "6. নতুন buyer-এর জন্য salesman/agent লাগে, নাকি buyer সরাসরি contact করে?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q7",
+       "label": "7. মাসে আনুমানিক কতজন নতুন buyer যোগাযোগ করে?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q8",
+       "label": "8. তার মধ্যে কতজন serious/genuine buyer হয়?",
+       "type": "textarea",
+       "star": true
+      }
+     ]
+    },
+    {
+     "title": "C. Pain Points / সমস্যা",
+     "fields": [
+      {
+       "key": "q9",
+       "label": "9. নতুন buyer খুঁজতে আপনাদের সবচেয়ে বড় সমস্যা কী?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q10",
+       "label": "10. Buyer পাওয়ার সমস্যা বেশি, নাকি পাওয়ার পর order convert করার সমস্যা বেশি?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q11",
+       "label": "11. এমন কি হয় যে buyer product খুঁজছে কিন্তু আপনাদের কাছে পৌঁছাতে পারছে না?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q12",
+       "label": "12. আপনারা কি নিয়মিত নতুন buyer-এর enquiry পান?",
+       "type": "textarea",
+       "star": false
+      }
+     ]
+    },
+    {
+     "title": "D. Order, Quotation & Pricing / অর্ডার ও দাম",
+     "fields": [
+      {
+       "key": "q13",
+       "label": "13. একজন নতুন buyer সাধারণত কীভাবে quotation চায়?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q14",
+       "label": "14. একজন buyer সাধারণত কয়জন manufacturer-এর quotation নেয়?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q15",
+       "label": "15. আপনাদের quotation তৈরি করতে কত সময় লাগে?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q16",
+       "label": "16. Buyer কি price-এর জন্য বেশি negotiate করে?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q17",
+       "label": "17. একজন buyer সাধারণত কত quantity order করে?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q18",
+       "label": "18. একজন buyer আবার কতদিন পর order করে?",
+       "type": "textarea",
+       "star": false
+      }
+     ]
+    },
+    {
+     "title": "E. Trust & Verification / বিশ্বাস ও যাচাই",
+     "fields": [
+      {
+       "key": "q19",
+       "label": "19. আপনারা নতুন buyer-এর authenticity কীভাবে verify করেন?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q20",
+       "label": "20. Buyer-এর company information check করার কোনো process আছে?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q21",
+       "label": "21. কখনো fake enquiry বা unserious buyer পেয়েছেন?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q22",
+       "label": "22. নতুন buyer-এর কোন information থাকলে বেশি confident হন?",
+       "type": "textarea",
+       "star": false
+      }
+     ]
+    },
+    {
+     "title": "F. Digital Presence / অনলাইন উপস্থিতি",
+     "fields": [
+      {
+       "key": "q23",
+       "label": "23. আপনাদের website আছে?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q24",
+       "label": "24. Facebook/LinkedIn/অন্য online channel থেকে enquiry আসে?",
+       "type": "textarea",
+       "star": false
+      },
+      {
+       "key": "q25",
+       "label": "25. আপনারা কোনো B2B marketplace ব্যবহার করেন?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q26",
+       "label": "26. যদি না করেন, কেন করেন না?",
+       "type": "textarea",
+       "star": true
+      },
+      {
+       "key": "q27",
+       "label": "27. যদি করেন, কোন platform এবং সেখানে সবচেয়ে useful feature কোনটা?",
+       "type": "textarea",
+       "star": true
+      }
+     ]
+    },
+    {
+     "title": "Internal notes / ইন্টারনাল নোট (team only)",
+     "fields": [
+      {
+       "key": "interest",
+       "label": "Interest level",
+       "type": "radio",
+       "options": [
+        "High",
+        "Medium",
+        "Low"
+       ]
+      },
+      {
+       "key": "next_action",
+       "label": "Next action / date",
+       "type": "text"
+      },
+      {
+       "key": "notes",
+       "label": "Notes",
+       "type": "textarea"
+      }
+     ]
+    }
+   ]
+  }
+ }
+}
