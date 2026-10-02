@@ -1,0 +1,26 @@
+# ============================================
+# WSGI Configuration for PythonAnywhere
+# ============================================
+# 
+# INSTRUCTIONS:
+# 1. Go to Web tab in PythonAnywhere
+# 2. Click on WSGI configuration file link
+# 3. DELETE EVERYTHING in that file
+# 4. COPY-PASTE the code below
+# 5. REPLACE 'YOUR_USERNAME' with your actual PythonAnywhere username
+# 6. Save the file (Ctrl+S)
+# ============================================
+
+import sys
+import os
+
+# IMPORTANT: Replace YOUR_USERNAME with your actual username (e.g., shuvo8220)
+project_home = '/home/YOUR_USERNAME/supplier-collector'
+if project_home not in sys.path:
+    sys.path = [project_home] + sys.path
+
+from app import app as application
+
+# ============================================
+# That's it! Save and reload your web app
+# ============================================
