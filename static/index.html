@@ -1,37 +1,53 @@
 <!DOCTYPE html>
 <html lang="bn"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Supplier Collector</title><meta name="theme-color" content="#1f2d3d">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600&family=Noto+Sans+Bengali:wght@400;600&display=swap" rel="stylesheet">
+<title>মহাজন - Supplier Registration</title><meta name="theme-color" content="#0f4c81">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#1f2d3d;--mut:#5d6b7a;--bg:#f4f6f7;--card:#fff;--line:#d5dbe0;--tape:#e0a100;--ok:#16794c;--err:#b3261e}
+:root{--primary:#0f4c81;--secondary:#1a73b8;--accent:#f59e0b;--ink:#1f2d3d;--mut:#5d6b7a;--bg:#f8fafc;--card:#fff;--line:#e2e8f0;--ok:#16794c;--err:#dc2626}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
-header{background:var(--ink);color:#fff;padding:14px 20px;border-bottom:4px solid var(--tape);position:sticky;top:0;z-index:5}
-header h1{margin:0;font-size:18px}
-nav{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-nav button{background:transparent;color:#cfd8e0;border:1px solid #4a5b6d;border-radius:6px;padding:6px 14px;font:inherit;cursor:pointer}
-nav button.on{background:var(--tape);color:#1f2d3d;border-color:var(--tape);font-weight:600}
-main{max-width:860px;margin:0 auto;padding:16px}
-section{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 16px;margin-bottom:14px}
-section h2{font-size:16px;margin:0 0 10px;padding-left:10px;border-left:4px solid var(--tape)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+header{background:linear-gradient(135deg,var(--primary) 0%, var(--secondary) 100%);color:#fff;padding:20px;box-shadow:0 4px 6px rgba(0,0,0,0.1);position:sticky;top:0;z-index:100}
+.header-content{max-width:860px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.logo{width:50px;height:50px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+header h1{margin:0;font-size:28px;font-weight:700;letter-spacing:-0.5px}
+.tagline{font-size:13px;opacity:0.9;margin-top:4px}
+nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+nav button{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:10px 18px;font:inherit;cursor:pointer;transition:all 0.2s;font-weight:500}
+nav button:hover{background:rgba(255,255,255,0.25);transform:translateY(-1px)}
+nav button.on{background:#fff;color:var(--primary);border-color:#fff;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
+main{max-width:860px;margin:0 auto;padding:24px 16px}
+.page-title{text-align:center;margin-bottom:30px}
+.page-title h2{font-size:24px;color:var(--primary);margin:0 0 8px}
+.page-title p{color:var(--mut);margin:0}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:20px;box-shadow:0 2px 4px rgba(0,0,0,0.04)}
+section h2{font-size:17px;margin:0 0 16px;padding-left:12px;border-left:4px solid var(--accent);color:var(--primary);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
 .fld.wide{grid-column:1/-1}
-label.l{display:block;font-weight:600;font-size:14px;margin-bottom:4px}
-.req{color:var(--err)}.star{color:var(--tape)}
-input[type=text],input[type=number],input[type=date],select,textarea{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:6px;font:inherit;background:#fff}
-textarea{min-height:70px;resize:vertical}
-input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--tape);outline-offset:1px}
-.opts{display:flex;flex-wrap:wrap;gap:6px 16px}.opts label{display:flex;gap:6px;align-items:center;cursor:pointer}
-.btn{background:var(--ink);color:#fff;border:0;border-radius:6px;padding:11px 22px;font:inherit;font-weight:600;cursor:pointer}
-.btn.alt{background:#fff;color:var(--ink);border:1px solid var(--ink)}
-.msg{margin-left:12px;font-weight:600}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
-.row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px dashed var(--line)}
-.row button{background:none;border:0;color:var(--err);cursor:pointer;font:inherit}
-.note{color:var(--mut);font-size:14px}
+label.l{display:block;font-weight:600;font-size:14px;margin-bottom:6px;color:var(--ink)}
+.req{color:var(--err);font-size:16px}.star{color:var(--accent);font-size:18px}
+input[type=text],input[type=number],input[type=date],input[type=tel],select,textarea{width:100%;padding:11px 14px;border:2px solid var(--line);border-radius:8px;font:inherit;background:#fff;transition:border-color 0.2s}
+input:hover,select:hover,textarea:hover{border-color:#cbd5e1}
+textarea{min-height:80px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,76,129,0.1)}
+button:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.opts{display:flex;flex-wrap:wrap;gap:10px 20px}.opts label{display:flex;gap:8px;align-items:center;cursor:pointer;font-size:15px}
+.btn{background:linear-gradient(135deg,var(--primary) 0%, var(--secondary) 100%);color:#fff;border:0;border-radius:10px;padding:14px 32px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(15,76,129,0.3);transition:all 0.2s;font-size:16px}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(15,76,129,0.4)}
+.btn.alt{background:#fff;color:var(--primary);border:2px solid var(--primary);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+.btn.alt:hover{background:var(--primary);color:#fff}
+.submit-wrap{text-align:center;margin-top:30px;padding-top:20px;border-top:2px solid var(--line)}
+.msg{margin-top:12px;font-weight:600;font-size:15px;display:block}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line)}
+.row button{background:none;border:0;color:var(--err);cursor:pointer;font:inherit;text-decoration:underline}
+.note{color:var(--mut);font-size:14px;line-height:1.6}
+footer{text-align:center;padding:30px 20px;color:var(--mut);font-size:14px;border-top:1px solid var(--line);margin-top:40px}
+footer strong{color:var(--primary)}
 </style></head><body>
-<header><h1>Supplier Collector</h1><nav id="nav"></nav></header>
+<header><div class="header-content"><div class="brand"><div class="logo">M</div><div><h1>মহাজন</h1><div class="tagline">Supplier Registration & Management Portal</div></div></div><nav id="nav"></nav></div></header>
 <main id="app"></main>
+<footer><strong>মহাজন</strong> © 2024 | Powered by Mohajon Technology</footer>
 <script>
 let S, tab="supplier";
 const $=(h)=>{const d=document.createElement("div");d.innerHTML=h.trim();return d.firstChild};
@@ -56,8 +72,8 @@ function fieldEl(f){
 }
 function renderForm(id){
   const F=S.forms[id],app=document.getElementById("app");
-  app.innerHTML=`<form id="f">${F.sections.map(s=>`<section><h2>${s.title}</h2><div class="grid">${s.fields.map(fieldEl).join("")}</div></section>`).join("")}
-  <button class="btn" type="submit">Save to Excel</button><span id="m" class="msg"></span></form>`;
+  app.innerHTML=`<div class="page-title"><h2>${F.title}</h2><p>সঠিক ও সম্পূর্ণ তথ্য প্রদান করুন</p></div><form id="f">${F.sections.map(s=>`<section><h2>${s.title}</h2><div class="grid">${s.fields.map(fieldEl).join("")}</div></section>`).join("")}
+  <div class="submit-wrap"><button class="btn" type="submit">✓ Submit & Save to Excel</button><span id="m" class="msg"></span></div></form>`;
   document.getElementById("f").onsubmit=async e=>{
     e.preventDefault();const m=document.getElementById("m"),data={};
     F.sections.forEach(s=>s.fields.forEach(f=>{
@@ -65,7 +81,7 @@ function renderForm(id){
       data[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
         :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0].value}));
     try{await api("/api/submit/"+id,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-      m.textContent="Saved ✓";m.className="msg ok";e.target.reset();
+      m.textContent="✓ সফলভাবে সংরক্ষিত হয়েছে! ধন্যবাদ।";m.className="msg ok";e.target.reset();
       e.target.querySelectorAll('input[type=date]').forEach(d=>d.value=today());scrollTo(0,0)}
     catch(x){m.textContent=x.message;m.className="msg err"}}
 }
