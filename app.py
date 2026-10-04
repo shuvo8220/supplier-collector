@@ -73,7 +73,18 @@ def index():
 
 @app.get("/api/schema")
 def get_schema():
-    return jsonify(load_schema())
+    # Ensure all form columns exist in Excel
+    schema = load_schema()
+    try:
+        with lock:
+            wb = open_wb()
+            for form_id, form in schema["forms"].items():
+                if form.get("sheet"):  # Only for forms that save to Excel
+                    sync_sheet(wb, form)
+            save_wb(wb)
+    except Exception as e:
+        print(f"[WARNING] Could not sync all form columns: {e}")
+    return jsonify(schema)
 
 @app.post("/api/submit/<fid>")
 def submit(fid):
@@ -82,10 +93,11 @@ def submit(fid):
     if not form:
         return jsonify(error="unknown form"), 404
     data = request.get_json(force=True)
-    missing = [f["label"] for f in all_fields(form)
-               if f.get("required") and not data.get(f["key"])]
-    if missing:
-        return jsonify(error="Required: " + "; ".join(missing)), 400
+    
+    # Get company name for row matching
+    company_name = data.get("company", "").strip()
+    print(f"[DEBUG] Form: {fid}, Company: '{company_name}'")  # Debug log
+    
     ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     with lock:
         with BACKUP.open("a", encoding="utf-8") as fh:
@@ -93,15 +105,52 @@ def submit(fid):
         try:
             wb = open_wb()
             ws, cols = sync_sheet(wb, form)
-            r = max(ws.max_row + 1, 3)
-            ws.cell(r, 1, ts)
+            
+            # Find existing row for this company or create new
+            existing_row = None
+            if company_name:
+                # First ensure company column exists
+                if "company" not in cols:
+                    c = ws.max_column + 1
+                    ws.cell(2, c, "company")
+                    ws.cell(1, c, "Company Name / কোম্পানির নাম")
+                    cols["company"] = c
+                
+                company_col = cols["company"]
+                print(f"[DEBUG] Searching in column {company_col} for '{company_name}'")
+                
+                # Search for existing company
+                for row_num in range(3, ws.max_row + 1):
+                    cell_value = ws.cell(row_num, company_col).value
+                    if cell_value:
+                        cell_str = str(cell_value).strip().lower()
+                        company_str = company_name.strip().lower()
+                        print(f"[DEBUG] Row {row_num}: '{cell_str}' vs '{company_str}'")
+                        if cell_str == company_str:
+                            existing_row = row_num
+                            print(f"[DEBUG] ✓ Match found at row: {row_num}")
+                            break
+                
+                if not existing_row:
+                    print(f"[DEBUG] No match found, creating new row")
+            
+            # Use existing row or create new
+            r = existing_row if existing_row else max(ws.max_row + 1, 3)
+            
+            # Update timestamp only if new row
+            if not existing_row:
+                ws.cell(r, 1, ts)
+            
+            # Write data to cells
             for k, v in data.items():
                 if k in cols:
-                    ws.cell(r, cols[k], ", ".join(v) if isinstance(v, list) else v)
+                    cell_value = ", ".join(v) if isinstance(v, list) else v
+                    ws.cell(r, cols[k], cell_value)
+            
             save_wb(wb)
         except RuntimeError as e:
             return jsonify(error=str(e)), 500
-    return jsonify(ok=True, row=r)
+    return jsonify(ok=True, row=r, updated=bool(existing_row))
 
 @app.post("/api/field")
 def add_field():
