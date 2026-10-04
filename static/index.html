@@ -5,45 +5,89 @@
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
 :root{--primary:#0f4c81;--secondary:#1a73b8;--accent:#f59e0b;--ink:#1f2d3d;--mut:#5d6b7a;--bg:#f8fafc;--card:#fff;--line:#e2e8f0;--ok:#16794c;--err:#dc2626}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 "Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif}
-header{background:linear-gradient(135deg,var(--primary) 0%, var(--secondary) 100%);color:#fff;padding:20px;box-shadow:0 4px 6px rgba(0,0,0,0.1);position:sticky;top:0;z-index:100}
-.header-content{max-width:860px;margin:0 auto}
-.brand{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.logo{width:50px;height:50px;background:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,0.15)}
-header h1{margin:0;font-size:28px;font-weight:700;letter-spacing:-0.5px}
-.tagline{font-size:13px;opacity:0.9;margin-top:4px}
-nav{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
-nav button{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:10px 18px;font:inherit;cursor:pointer;transition:all 0.2s;font-weight:500}
-nav button:hover{background:rgba(255,255,255,0.25);transform:translateY(-1px)}
-nav button.on{background:#fff;color:var(--primary);border-color:#fff;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.1)}
-main{max-width:860px;margin:0 auto;padding:24px 16px}
-.page-title{text-align:center;margin-bottom:30px}
-.page-title h2{font-size:24px;color:var(--primary);margin:0 0 8px}
-.page-title p{color:var(--mut);margin:0}
-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-bottom:20px;box-shadow:0 2px 4px rgba(0,0,0,0.04)}
-section h2{font-size:17px;margin:0 0 16px;padding-left:12px;border-left:4px solid var(--accent);color:var(--primary);font-weight:600}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Hind Siliguri","Noto Sans Bengali",system-ui,sans-serif;padding-bottom:60px}
+header{background:linear-gradient(135deg,var(--primary) 0%, var(--secondary) 100%);color:#fff;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.15);position:sticky;top:0;z-index:100}
+.header-content{max-width:1200px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo{width:44px;height:44px;background:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--primary);box-shadow:0 2px 6px rgba(0,0,0,0.1);flex-shrink:0}
+header h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-0.3px;line-height:1.2}
+.tagline{font-size:12px;opacity:0.9;margin-top:3px;display:none}
+@media(min-width:480px){
+  .logo{width:50px;height:50px;font-size:24px}
+  header h1{font-size:26px}
+  .tagline{display:block}
+}
+nav{display:flex;gap:6px;margin-top:14px;flex-wrap:wrap;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+nav button{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);border-radius:8px;padding:10px 14px;font:inherit;cursor:pointer;transition:all 0.2s;font-weight:500;font-size:14px;white-space:nowrap;min-height:44px}
+nav button:hover{background:rgba(255,255,255,0.25)}
+nav button:active{transform:scale(0.98)}
+nav button.on{background:#fff;color:var(--primary);border-color:#fff;font-weight:600;box-shadow:0 2px 4px rgba(0,0,0,0.15)}
+main{max-width:1200px;margin:0 auto;padding:16px 12px}
+@media(min-width:768px){
+  main{padding:24px 20px}
+  nav button{padding:11px 18px;font-size:15px}
+}
+.page-title{text-align:center;margin-bottom:24px;padding:0 8px}
+.page-title h2{font-size:20px;color:var(--primary);margin:0 0 6px;line-height:1.3}
+.page-title p{color:var(--mut);margin:0;font-size:14px}
+@media(min-width:480px){
+  .page-title h2{font-size:24px}
+  .page-title p{font-size:15px}
+}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+@media(min-width:768px){
+  section{padding:22px 24px;margin-bottom:20px}
+}
+section h2{font-size:16px;margin:0 0 14px;padding-left:10px;border-left:4px solid var(--accent);color:var(--primary);font-weight:600;line-height:1.4}
+@media(min-width:480px){
+  section h2{font-size:17px;margin-bottom:16px}
+}
+.grid{display:grid;grid-template-columns:1fr;gap:14px}
+@media(min-width:640px){
+  .grid{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+}
 .fld.wide{grid-column:1/-1}
-label.l{display:block;font-weight:600;font-size:14px;margin-bottom:6px;color:var(--ink)}
-.req{color:var(--err);font-size:16px}.star{color:var(--accent);font-size:18px}
-input[type=text],input[type=number],input[type=date],input[type=tel],select,textarea{width:100%;padding:11px 14px;border:2px solid var(--line);border-radius:8px;font:inherit;background:#fff;transition:border-color 0.2s}
-input:hover,select:hover,textarea:hover{border-color:#cbd5e1}
-textarea{min-height:80px;resize:vertical}
+label.l{display:block;font-weight:600;font-size:15px;margin-bottom:8px;color:var(--ink);line-height:1.4}
+.req{color:var(--err);font-size:18px;margin-left:2px}.star{color:var(--accent);font-size:18px;margin-right:2px}
+input[type=text],input[type=number],input[type=date],input[type=tel],select,textarea{width:100%;padding:13px 14px;border:2px solid var(--line);border-radius:10px;font:inherit;font-size:16px;background:#fff;transition:border-color 0.2s;-webkit-appearance:none}
+input[readonly]{background:#f1f5f9;cursor:not-allowed;color:var(--mut)}
+input::placeholder,textarea::placeholder{color:#94a3b8;font-size:15px}
+input:hover:not([readonly]),select:hover,textarea:hover{border-color:#cbd5e1}
+textarea{min-height:100px;resize:vertical;line-height:1.5}
 input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(15,76,129,0.1)}
 button:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
-.opts{display:flex;flex-wrap:wrap;gap:10px 20px}.opts label{display:flex;gap:8px;align-items:center;cursor:pointer;font-size:15px}
-.btn{background:linear-gradient(135deg,var(--primary) 0%, var(--secondary) 100%);color:#fff;border:0;border-radius:10px;padding:14px 32px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(15,76,129,0.3);transition:all 0.2s;font-size:16px}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%235d6b7a' d='M5 8l5 5 5-5z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:40px}
+.opts{display:flex;flex-direction:column;gap:12px}
+@media(min-width:480px){
+  .opts{flex-direction:row;flex-wrap:wrap;gap:10px 20px}
+}
+.opts label{display:flex;gap:10px;align-items:center;cursor:pointer;font-size:15px;padding:10px 12px;background:#f8fafc;border:2px solid var(--line);border-radius:8px;transition:all 0.2s;min-height:48px}
+.opts label:hover{background:#f1f5f9;border-color:#cbd5e1}
+.opts input[type=radio],.opts input[type=checkbox]{width:20px;height:20px;cursor:pointer;flex-shrink:0}
+.opts input[type=radio]:checked+span,.opts input[type=checkbox]:checked+span{font-weight:600}
+.opts label:has(input:checked){background:#e0f2fe;border-color:var(--primary)}
+.btn{background:linear-gradient(135deg,var(--primary) 0%, var(--secondary) 100%);color:#fff;border:0;border-radius:12px;padding:16px 28px;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 4px 12px rgba(15,76,129,0.3);transition:all 0.2s;font-size:17px;width:100%;max-width:400px;min-height:54px}
+@media(min-width:480px){
+  .btn{width:auto;min-width:240px}
+}
 .btn:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(15,76,129,0.4)}
+.btn:active{transform:translateY(0);box-shadow:0 2px 8px rgba(15,76,129,0.3)}
 .btn.alt{background:#fff;color:var(--primary);border:2px solid var(--primary);box-shadow:0 2px 8px rgba(0,0,0,0.08)}
 .btn.alt:hover{background:var(--primary);color:#fff}
-.submit-wrap{text-align:center;margin-top:30px;padding-top:20px;border-top:2px solid var(--line)}
-.msg{margin-top:12px;font-weight:600;font-size:15px;display:block}.msg.ok{color:var(--ok)}.msg.err{color:var(--err)}
-.row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line)}
-.row button{background:none;border:0;color:var(--err);cursor:pointer;font:inherit;text-decoration:underline}
-.note{color:var(--mut);font-size:14px;line-height:1.6}
-footer{text-align:center;padding:30px 20px;color:var(--mut);font-size:14px;border-top:1px solid var(--line);margin-top:40px}
+.submit-wrap{text-align:center;margin-top:28px;padding-top:20px;border-top:2px solid var(--line)}
+.msg{margin-top:14px;font-weight:600;font-size:15px;display:block;padding:10px;border-radius:8px}
+.msg.ok{color:var(--ok);background:#f0fdf4;border:1px solid #86efac}
+.msg.err{color:var(--err);background:#fef2f2;border:1px solid #fca5a5}
+.map-preview{padding:12px;background:#f0f9ff;border:1px solid #bfdbfe;border-radius:8px;font-size:14px;color:#1e40af;margin-top:8px}
+.map-preview a{color:var(--primary);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:8px 12px;background:#fff;border-radius:6px;border:1px solid #bfdbfe;min-height:44px}
+.map-preview a:hover{background:#e0f2fe;text-decoration:none}
+.map-preview a:active{transform:scale(0.98)}
+footer{text-align:center;padding:24px 16px;color:var(--mut);font-size:13px;border-top:1px solid var(--line);margin-top:32px}
 footer strong{color:var(--primary)}
+.row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line);min-height:48px}
+.row button{background:none;border:0;color:var(--err);cursor:pointer;font:inherit;text-decoration:underline;padding:8px;min-height:44px}
+.note{color:var(--mut);font-size:14px;line-height:1.6;padding:12px;background:#f8fafc;border-radius:6px;margin-top:8px}
 </style></head><body>
 <header><div class="header-content"><div class="brand"><div class="logo">M</div><div><h1>মহাজন</h1><div class="tagline">Supplier Registration & Management Portal</div></div></div><nav id="nav"></nav></div></header>
 <main id="app"></main>
@@ -63,26 +107,101 @@ function render(){
 function fieldEl(f){
   const lab=`<label class="l">${f.star?'<span class="star">★</span> ':""}${f.label}${f.required?' <span class="req">*</span>':""}</label>`;
   let inp="";
-  if(f.type==="textarea")inp=`<textarea name="${f.key}"></textarea>`;
-  else if(f.type==="select")inp=`<select name="${f.key}"><option value=""></option>${f.options.map(o=>`<option>${o}</option>`).join("")}</select>`;
-  else if(f.type==="radio"||f.type==="checkbox")inp=`<div class="opts">${f.options.map(o=>`<label><input type="${f.type}" name="${f.key}" value="${o}"> ${o}</label>`).join("")}</div>`;
-  else inp=`<input type="${["phone","whatsapp"].includes(f.key)?"tel":f.type}" name="${f.key}" ${f.today?`value="${today()}"`:""}>`;
-  const wide=f.type==="textarea"||f.type==="checkbox"||f.options&&f.options.join("").length>40;
-  return `<div class="fld ${wide?"wide":""}">${lab}${inp}</div>`;
+  if(f.type==="textarea"){
+    inp=`<textarea name="${f.key}" placeholder="${f.placeholder||''}" ${f.maplink?'data-maplink="true"':''} ${f.conditional?`data-conditional="${f.conditional}" data-showwhen="${f.showWhen}" style="display:none"`:''}></textarea>`;
+    if(f.maplink)inp+=`<div class="map-preview" id="map_${f.key}" style="display:none"></div>`;
+  }
+  else if(f.type==="select")inp=`<select name="${f.key}"><option value="">-- নির্বাচন করুন --</option>${f.options.map(o=>`<option>${o}</option>`).join("")}</select>`;
+  else if(f.type==="radio")inp=`<div class="opts" ${f.key.match(/custom|sample|price_list/)?`data-trigger="${f.key}"`:''}>${f.options.map(o=>`<label><input type="radio" name="${f.key}" value="${o}"><span>${o}</span></label>`).join("")}</div>`;
+  else if(f.type==="checkbox")inp=`<div class="opts">${f.options.map(o=>`<label><input type="checkbox" name="${f.key}" value="${o}"><span>${o}</span></label>`).join("")}</div>`;
+  else inp=`<input type="${["phone","whatsapp"].includes(f.key)||f.key.includes("phone")?"tel":f.type}" name="${f.key}" ${f.today?`value="${today()}"`:""} ${f.readonly?'readonly':''} placeholder="${f.placeholder||''}" ${f.conditional?`data-conditional="${f.conditional}" data-showwhen="${f.showWhen}" style="display:none"`:''}">`;
+  const wide=f.type==="textarea"||f.type==="checkbox"||f.options&&f.options.join("").length>40||f.conditional;
+  return `<div class="fld ${wide?"wide":""}" ${f.conditional?`id="fld_${f.key}"`:''}>${lab}${inp}</div>`;
 }
 function renderForm(id){
   const F=S.forms[id],app=document.getElementById("app");
   app.innerHTML=`<div class="page-title"><h2>${F.title}</h2><p>সঠিক ও সম্পূর্ণ তথ্য প্রদান করুন</p></div><form id="f">${F.sections.map(s=>`<section><h2>${s.title}</h2><div class="grid">${s.fields.map(fieldEl).join("")}</div></section>`).join("")}
   <div class="submit-wrap"><button class="btn" type="submit">✓ Submit & Save to Excel</button><span id="m" class="msg"></span></div></form>`;
+  
+  // Add map link listeners for address fields
+  document.querySelectorAll('textarea[data-maplink="true"]').forEach(ta=>{
+    const addrKey = ta.name;
+    const mapLinkKey = addrKey.replace('_addr','_map_link');
+    const mapLinkInput = document.querySelector(`input[name="${mapLinkKey}"]`);
+    
+    const updateMapPreview = ()=>{
+      const addr=ta.value.trim();
+      const customLink=mapLinkInput?mapLinkInput.value.trim():'';
+      const mapDiv=document.getElementById('map_'+addrKey);
+      
+      if(mapDiv){
+        if(customLink){
+          // User provided exact map link
+          mapDiv.style.display='block';
+          mapDiv.innerHTML=`<a href="${customLink}" target="_blank">📍 View Exact Location on Google Maps</a>`;
+        }else if(addr){
+          // Auto-generate search link from address
+          const mapUrl=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr)}`;
+          mapDiv.style.display='block';
+          mapDiv.innerHTML=`<a href="${mapUrl}" target="_blank">📍 Search "${addr.substring(0,35)}..." on Google Maps</a>`;
+        }else{
+          mapDiv.style.display='none';
+        }
+      }
+    };
+    
+    ta.addEventListener('input',updateMapPreview);
+    if(mapLinkInput){
+      mapLinkInput.addEventListener('input',updateMapPreview);
+    }
+  });
+
+  // Add conditional field logic
+  document.querySelectorAll('[data-trigger]').forEach(trigger=>{
+    const triggerName=trigger.dataset.trigger;
+    trigger.querySelectorAll('input[type="radio"]').forEach(radio=>{
+      radio.addEventListener('change',function(){
+        const selectedValue=this.value;
+        const conditionalFields=document.querySelectorAll(`[data-conditional="${triggerName}"]`);
+        conditionalFields.forEach(field=>{
+          const showWhen=field.dataset.showwhen;
+          const parentFld=field.closest('.fld');
+          if(selectedValue===showWhen){
+            if(parentFld)parentFld.style.display='block';
+            field.style.display='block';
+          }else{
+            if(parentFld)parentFld.style.display='none';
+            field.style.display='none';
+            field.value=''; // Clear value when hidden
+          }
+        });
+      });
+    });
+  });
   document.getElementById("f").onsubmit=async e=>{
     e.preventDefault();const m=document.getElementById("m"),data={};
     F.sections.forEach(s=>s.fields.forEach(f=>{
       const els=[...e.target.querySelectorAll(`[name="${f.key}"]`)];
       data[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
-        :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0].value}));
+        :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0].value;
+      // Auto-generate map link for address fields
+      if(f.maplink && data[f.key]){
+        const mapLinkKey = f.key.replace('_addr','_map_link');
+        const customMapLink = data[mapLinkKey];
+        
+        if(customMapLink && customMapLink.trim()){
+          // User provided exact map link - use that
+          data[f.key+'_final_map_link'] = customMapLink.trim();
+        }else{
+          // Auto-generate from address
+          data[f.key+'_final_map_link']=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data[f.key])}`;
+        }
+      }
+    }));
     try{await api("/api/submit/"+id,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
       m.textContent="✓ সফলভাবে সংরক্ষিত হয়েছে! ধন্যবাদ।";m.className="msg ok";e.target.reset();
-      e.target.querySelectorAll('input[type=date]').forEach(d=>d.value=today());scrollTo(0,0)}
+      e.target.querySelectorAll('input[type=date]').forEach(d=>d.value=today());
+      document.querySelectorAll('.map-preview').forEach(mp=>mp.innerHTML='');scrollTo(0,0)}
     catch(x){m.textContent=x.message;m.className="msg err"}}
 }
 function renderAdmin(){

@@ -1,113 +1,384 @@
 {
  "forms": {
   "supplier": {
-   "title": "Supplier Onboarding & Interview / সাপ্লায়ার অনবোর্ডিং ও ইন্টারভিউ",
+   "title": "Supplier Onboarding / সাপ্লায়ার অনবোর্ডিং",
    "sheet": "Suppliers",
    "sections": [
     {
-     "title": "Basic / সংগ্রহ",
+     "title": "Basic Info",
      "fields": [
       {
        "key": "date",
        "label": "Date / তারিখ",
        "type": "date",
-       "today": true
+       "today": true,
+       "readonly": true
       },
       {
        "key": "collected_by",
        "label": "Collected by / সংগ্রহকারী",
+       "type": "select",
+       "options": [
+        "Momen",
+        "Shuvo",
+        "Tithi",
+        "Apon",
+        "Arnob"
+       ]
+      },
+      {
+       "key": "company",
+       "label": "Company Name / কোম্পানির নাম",
        "type": "text"
       }
      ]
     },
     {
-     "title": "1. Company / কোম্পানি",
+     "title": "Company Information / কোম্পানি তথ্য",
      "fields": [
       {
-       "key": "company",
-       "label": "Company / Brand / কোম্পানির নাম",
-       "type": "text",
-       "required": true
-      },
-      {
        "key": "est_year",
-       "label": "Established year / কত সালে শুরু",
-       "type": "number"
-      },
-      {
-       "key": "business_type",
-       "label": "Business type",
-       "type": "radio",
-       "options": [
-        "Manufacturer",
-        "Trader",
-        "Both"
-       ],
-       "required": true
+       "label": "Established Year / প্রতিষ্ঠার বছর",
+       "type": "number",
+       "placeholder": "Example: 2015"
       },
       {
        "key": "employees",
-       "label": "Employees / কর্মী",
-       "type": "radio",
+       "label": "Number of Employees / কর্মী সংখ্যা",
+       "type": "number",
+       "placeholder": "Example: 50"
+      },
+      {
+       "key": "business_type",
+       "label": "Business Type / ব্যবসার ধরন",
+       "type": "select",
        "options": [
-        "1-10",
-        "11-50",
-        "51-200",
-        "200+"
+        "Manufacturer / উৎপাদনকারী",
+        "Trader / ব্যবসায়ী",
+        "Wholesaler / পাইকারি বিক্রেতা",
+        "Distributor / ডিস্ট্রিবিউটর",
+        "Retailer / খুচরা বিক্রেতা",
+        "Importer / আমদানিকারক",
+        "Exporter / রপ্তানিকারক",
+        "Manufacturer + Trader / উৎপাদনকারী + ব্যবসায়ী",
+        "Manufacturer + Exporter / উৎপাদনকারী + রপ্তানিকারক",
+        "Supplier / সরবরাহকারী",
+        "Agent / এজেন্ট",
+        "Service Provider / সেবা প্রদানকারী",
+        "Contractor / ঠিকাদার",
+        "Other / অন্যান্য"
        ]
       }
      ]
     },
     {
-     "title": "2. Contact / যোগাযোগ",
+     "title": "Products / প্রোডাক্ট",
      "fields": [
       {
-       "key": "owner",
-       "label": "Owner name / মালিকের নাম",
-       "type": "text",
-       "required": true
+       "key": "product_type",
+       "label": "Product Type / প্রোডাক্ট টাইপ",
+       "type": "select",
+       "options": [
+        "Packaging Materials / প্যাকেজিং ম্যাটেরিয়াল",
+        "Food Packaging / ফুড প্যাকেজিং",
+        "Plastic Products / প্লাস্টিক পণ্য",
+        "Paper Products / পেপার পণ্য",
+        "Textile / টেক্সটাইল",
+        "Chemicals / কেমিক্যাল",
+        "Electronics / ইলেকট্রনিক্স",
+        "Raw Materials / কাঁচামাল",
+        "Machinery / যন্ত্রপাতি",
+        "Metal Products / মেটাল পণ্য",
+        "Printing Materials / প্রিন্টিং ম্যাটেরিয়াল",
+        "Adhesives / আঠা জাতীয়",
+        "Labels & Stickers / লেবেল ও স্টিকার",
+        "Corrugated Box / কার্টন বক্স",
+        "Poly Bags / পলি ব্যাগ",
+        "Other / অন্যান্য"
+       ]
       },
       {
-       "key": "phone",
-       "label": "Phone / ফোন",
+       "key": "product_type_custom",
+       "label": "Product Type (if Other) / অন্য হলে লিখুন",
        "type": "text",
-       "required": true
+       "placeholder": "যদি 'Other' select করেন, তাহলে এখানে লিখুন"
       },
       {
-       "key": "whatsapp",
-       "label": "WhatsApp / হোয়াটসঅ্যাপ",
-       "type": "text",
-       "required": true
+       "key": "main_products",
+       "label": "Main Products / প্রধান প্রোডাক্ট",
+       "type": "checkbox",
+       "options": [
+        "Corrugated Box / কার্টন বক্স",
+        "Poly Bag / পলি ব্যাগ",
+        "Shopping Bag / শপিং ব্যাগ",
+        "Paper Bag / পেপার ব্যাগ",
+        "Food Container / ফুড কন্টেইনার",
+        "Tissue Paper / টিস্যু পেপার",
+        "Labels / লেবেল",
+        "Stickers / স্টিকার",
+        "Carton / কার্টন",
+        "Tape / টেপ",
+        "Stretch Film / স্ট্রেচ ফিল্ম",
+        "Bubble Wrap / বাবল র্যাপ",
+        "Plastic Container / প্লাস্টিক কন্টেইনার",
+        "Paper Cup / পেপার কাপ",
+        "Plate / প্লেট",
+        "Spoon / চামচ",
+        "Aluminum Foil / এলুমিনিয়াম ফয়েল",
+        "Printing Ink / প্রিন্টিং কালি",
+        "Adhesive / আঠা",
+        "Zipper Bag / জিপার ব্যাগ",
+        "Stand Up Pouch / স্ট্যান্ড আপ পাউচ"
+       ]
       },
       {
-       "key": "handler",
-       "label": "Enquiry handler / ইনকোয়ারি কে দেখবেন",
+       "key": "main_products_other",
+       "label": "Other Products (if not listed above) / অন্য প্রোডাক্ট",
+       "type": "textarea",
+       "placeholder": "যদি উপরে তালিকায় না থাকে, এখানে লিখুন"
+      },
+      {
+       "key": "material",
+       "label": "Material / কাঁচামাল",
+       "type": "text",
+       "placeholder": "Example: Paper, Plastic, Aluminum"
+      },
+      {
+       "key": "custom",
+       "label": "Custom size / print available?",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No"
+       ]
+      },
+      {
+       "key": "custom_details",
+       "label": "Custom Details (if Yes) / কাস্টম বিস্তারিত",
+       "type": "textarea",
+       "placeholder": "যদি Yes হয়, তাহলে কি কি custom size/print করতে পারেন বিস্তারিত লিখুন",
+       "conditional": "custom",
+       "showWhen": "Yes"
+      },
+      {
+       "key": "sample",
+       "label": "Sample available?",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No"
+       ]
+      },
+      {
+       "key": "sample_details",
+       "label": "Sample Details (if Yes) / স্যাম্পল বিস্তারিত",
+       "type": "text",
+       "placeholder": "কত দিনে sample পাওয়া যাবে? খরচ কত?",
+       "conditional": "sample",
+       "showWhen": "Yes"
+      }
+     ]
+    },
+    {
+     "title": "Commercial / ব্যবসায়িক তথ্য",
+     "fields": [
+      {
+       "key": "moq",
+       "label": "MOQ / সর্বনিম্ন অর্ডার",
+       "type": "text",
+       "placeholder": "Example: 1000 pcs, 5000 pcs"
+      },
+      {
+       "key": "capacity",
+       "label": "Monthly capacity / মাসিক ক্ষমতা",
+       "type": "text",
+       "placeholder": "Example: 50,000 pcs/month"
+      },
+      {
+       "key": "lead_time",
+       "label": "Lead time (days) / ডেলিভারি সময়",
+       "type": "number",
+       "placeholder": "Days"
+      },
+      {
+       "key": "price_list",
+       "label": "Price list available?",
+       "type": "radio",
+       "options": [
+        "Yes",
+        "No"
+       ]
+      },
+      {
+       "key": "price_list_details",
+       "label": "Price List Details (if Yes) / প্রাইস লিস্ট বিস্তারিত",
+       "type": "text",
+       "placeholder": "Price list কোথায় পাওয়া যাবে? (Email, Website, etc.)",
+       "conditional": "price_list",
+       "showWhen": "Yes"
+      }
+     ]
+    }
+   ]
+  },
+  "contact": {
+   "title": "Contact Information / যোগাযোগের তথ্য",
+   "sheet": "Contacts",
+   "sections": [
+    {
+     "title": "Contact Person 1",
+     "fields": [
+      {
+       "key": "contact_person_1_name",
+       "label": "Name / নাম",
        "type": "text"
       },
       {
-       "key": "email_fb_web",
-       "label": "Email / FB / Website",
+       "key": "contact_person_1_designation",
+       "label": "Designation / পদবি",
+       "type": "select",
+       "options": [
+        "Owner",
+        "Co-Owner",
+        "Manager",
+        "Sales Manager",
+        "Employee",
+        "Director",
+        "Other"
+       ]
+      },
+      {
+       "key": "contact_person_1_phone",
+       "label": "Phone / ফোন",
+       "type": "text"
+      },
+      {
+       "key": "contact_person_1_whatsapp",
+       "label": "WhatsApp",
        "type": "text"
       }
      ]
     },
     {
-     "title": "3. Location / ঠিকানা",
+     "title": "Contact Person 2 (Optional)",
+     "fields": [
+      {
+       "key": "contact_person_2_name",
+       "label": "Name / নাম",
+       "type": "text"
+      },
+      {
+       "key": "contact_person_2_designation",
+       "label": "Designation / পদবি",
+       "type": "select",
+       "options": [
+        "Owner",
+        "Co-Owner",
+        "Manager",
+        "Sales Manager",
+        "Employee",
+        "Director",
+        "Other"
+       ]
+      },
+      {
+       "key": "contact_person_2_phone",
+       "label": "Phone / ফোন",
+       "type": "text"
+      },
+      {
+       "key": "contact_person_2_whatsapp",
+       "label": "WhatsApp",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "title": "Contact Person 3 (Optional)",
+     "fields": [
+      {
+       "key": "contact_person_3_name",
+       "label": "Name / নাম",
+       "type": "text"
+      },
+      {
+       "key": "contact_person_3_designation",
+       "label": "Designation / পদবি",
+       "type": "select",
+       "options": [
+        "Owner",
+        "Co-Owner",
+        "Manager",
+        "Sales Manager",
+        "Employee",
+        "Director",
+        "Other"
+       ]
+      },
+      {
+       "key": "contact_person_3_phone",
+       "label": "Phone / ফোন",
+       "type": "text"
+      },
+      {
+       "key": "contact_person_3_whatsapp",
+       "label": "WhatsApp",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "title": "Online Presence",
+     "fields": [
+      {
+       "key": "email",
+       "label": "Email / ইমেইল",
+       "type": "text"
+      },
+      {
+       "key": "facebook",
+       "label": "Facebook Page / Group",
+       "type": "text"
+      },
+      {
+       "key": "website",
+       "label": "Website / ওয়েবসাইট",
+       "type": "text"
+      }
+     ]
+    },
+    {
+     "title": "Location / ঠিকানা",
      "fields": [
       {
        "key": "factory_addr",
-       "label": "Factory address / কারখানার ঠিকানা",
+       "label": "Factory address / কারখানার ঠিকানা (বিস্তারিত: বাড়ি/রোড/এলাকা/থানা/জেলা)",
        "type": "textarea",
-       "required": true
+       "placeholder": "Example: House 12, Road 5, Sector 7, Uttara, Dhaka",
+       "maplink": true
+      },
+      {
+       "key": "factory_map_link",
+       "label": "Factory Google Maps Link (Optional - for exact location) / ম্যাপ লিংক (সঠিক অবস্থানের জন্য)",
+       "type": "text",
+       "placeholder": "Google Maps থেকে share link paste করুন (optional)"
       },
       {
        "key": "office_addr",
-       "label": "Office address / অফিসের ঠিকানা",
-       "type": "textarea"
+       "label": "Office address / অফিসের ঠিকানা (যদি আলাদা হয়)",
+       "type": "textarea",
+       "placeholder": "Example: House 25, Road 10, Gulshan, Dhaka",
+       "maplink": true
+      },
+      {
+       "key": "office_map_link",
+       "label": "Office Google Maps Link (Optional) / ম্যাপ লিংক",
+       "type": "text",
+       "placeholder": "Google Maps share link (optional)"
       },
       {
        "key": "factory_own",
-       "label": "Factory",
+       "label": "Factory / কারখানা",
        "type": "radio",
        "options": [
         "Own",
@@ -116,88 +387,25 @@
       },
       {
        "key": "delivery",
-       "label": "Delivery area",
+       "label": "Delivery area / ডেলিভারি এলাকা",
        "type": "checkbox",
        "options": [
         "Dhaka",
+        "Chattogram",
         "Nationwide",
         "Export"
        ]
       }
      ]
-    },
+    }
+   ]
+  },
+  "verification": {
+   "title": "Verification & Documents / যাচাইকরণ ও ডকুমেন্ট",
+   "sheet": "Verification",
+   "sections": [
     {
-     "title": "4. Products / প্রোডাক্ট",
-     "fields": [
-      {
-       "key": "subcat",
-       "label": "Sub-category / সাব-ক্যাটাগরি",
-       "type": "text",
-       "required": true
-      },
-      {
-       "key": "main_products",
-       "label": "Main products / প্রধান প্রোডাক্ট",
-       "type": "textarea"
-      },
-      {
-       "key": "material",
-       "label": "Material / কাঁচামাল",
-       "type": "text"
-      },
-      {
-       "key": "custom",
-       "label": "Custom size / print",
-       "type": "radio",
-       "options": [
-        "Yes",
-        "No"
-       ]
-      },
-      {
-       "key": "sample",
-       "label": "Sample available",
-       "type": "radio",
-       "options": [
-        "Yes",
-        "No"
-       ]
-      }
-     ]
-    },
-    {
-     "title": "5. Commercial / ব্যবসায়িক তথ্য",
-     "fields": [
-      {
-       "key": "moq",
-       "label": "MOQ / সর্বনিম্ন অর্ডার",
-       "type": "text",
-       "required": true
-      },
-      {
-       "key": "capacity",
-       "label": "Monthly capacity / মাসিক ক্ষমতা",
-       "type": "text",
-       "required": true
-      },
-      {
-       "key": "lead_time",
-       "label": "Lead time (days) / ডেলিভারি সময়",
-       "type": "number"
-      },
-      {
-       "key": "price_list",
-       "label": "Price list",
-       "type": "radio",
-       "options": [
-        "Yes",
-        "No"
-       ]
-      }
-     ]
-    },
-    {
-     "title": "6. Verification / যাচাইকরণ (optional)",
+     "title": "Legal Documents / আইনি ডকুমেন্ট",
      "fields": [
       {
        "key": "trade_license",
@@ -207,6 +415,11 @@
         "Yes",
         "No"
        ]
+      },
+      {
+       "key": "trade_license_no",
+       "label": "Trade License Number",
+       "type": "text"
       },
       {
        "key": "tin_bin",
@@ -231,7 +444,7 @@
      ]
     },
     {
-     "title": "7. Media / ছবি ও ক্যাটালগ",
+     "title": "Media / ছবি ও ক্যাটালগ",
      "fields": [
       {
        "key": "photo_product",
@@ -263,13 +476,12 @@
      ]
     },
     {
-     "title": "8. Consent / সম্মতি",
+     "title": "Consent / সম্মতি",
      "fields": [
       {
        "key": "consent",
        "label": "Consent / সম্মতি",
        "type": "checkbox",
-       "required": true,
        "options": [
         "আমার তথ্য ও ছবি প্ল্যাটফর্মে দেখাতে আমি রাজি।",
         "প্ল্যাটফর্ম টিম আমার তথ্য যাচাই করতে পারবে।"
@@ -278,22 +490,22 @@
       {
        "key": "signature",
        "label": "Signature / স্বাক্ষর (নাম লিখুন)",
-       "type": "text",
-       "required": true
+       "type": "text"
       },
       {
        "key": "sign_date",
        "label": "Date / তারিখ",
        "type": "date",
-       "required": true,
        "today": true
       }
      ]
-    },
-    {
-     "title": "9. Interview Questions / ইন্টারভিউ প্রশ্নাবলী",
-     "fields": []
-    },
+    }
+   ]
+  },
+  "interview": {
+   "title": "Supplier Interview / সাপ্লায়ার ইন্টারভিউ",
+   "sheet": "Interviews",
+   "sections": [
     {
      "title": "A. Business / ব্যবসা",
      "fields": [
