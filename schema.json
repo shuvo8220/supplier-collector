@@ -223,7 +223,7 @@
   },
   "contact": {
    "title": "Contact Information / যোগাযোগের তথ্য",
-   "sheet": "Contacts",
+   "sheet": "Suppliers",
    "sections": [
     {
      "title": "Contact Person 1",
@@ -359,9 +359,9 @@
       },
       {
        "key": "factory_map_link",
-       "label": "Factory Google Maps Link (Optional - for exact location) / ম্যাপ লিংক (সঠিক অবস্থানের জন্য)",
+       "label": "Factory Google Maps Link (auto-generated)",
        "type": "text",
-       "placeholder": "Google Maps থেকে share link paste করুন (optional)"
+       "readonly": true
       },
       {
        "key": "office_addr",
@@ -372,9 +372,9 @@
       },
       {
        "key": "office_map_link",
-       "label": "Office Google Maps Link (Optional) / ম্যাপ লিংক",
+       "label": "Office Google Maps Link (auto-generated)",
        "type": "text",
-       "placeholder": "Google Maps share link (optional)"
+       "readonly": true
       },
       {
        "key": "factory_own",
@@ -402,7 +402,7 @@
   },
   "verification": {
    "title": "Verification & Documents / যাচাইকরণ ও ডকুমেন্ট",
-   "sheet": "Verification",
+   "sheet": "Suppliers",
    "sections": [
     {
      "title": "Legal Documents / আইনি ডকুমেন্ট",
@@ -504,7 +504,7 @@
   },
   "interview": {
    "title": "Supplier Interview / সাপ্লায়ার ইন্টারভিউ",
-   "sheet": "Interviews",
+   "sheet": "Suppliers",
    "sections": [
     {
      "title": "A. Business / ব্যবসা",

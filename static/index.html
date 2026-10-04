@@ -120,8 +120,37 @@ function fieldEl(f){
 }
 function renderForm(id){
   const F=S.forms[id],app=document.getElementById("app");
-  app.innerHTML=`<div class="page-title"><h2>${F.title}</h2><p>সঠিক ও সম্পূর্ণ তথ্য প্রদান করুন</p></div><form id="f">${F.sections.map(s=>`<section><h2>${s.title}</h2><div class="grid">${s.fields.map(fieldEl).join("")}</div></section>`).join("")}
-  <div class="submit-wrap"><button class="btn" type="submit">✓ Submit & Save to Excel</button><span id="m" class="msg"></span></div></form>`;
+  
+  // Show current company if not supplier form
+  let companyInfo = '';
+  if(id!=='supplier'){
+    const savedCompany = localStorage.getItem('current_company');
+    if(savedCompany){
+      companyInfo = `<div style="background:#e0f2fe;padding:12px;border-radius:8px;margin-bottom:20px;text-align:center;font-weight:600;color:#0369a1">📋 Company: ${savedCompany} | Data auto-saving... Go to Supplier Onboarding to Submit!</div>`;
+    }else{
+      companyInfo = `<div style="background:#fef3c7;padding:12px;border-radius:8px;margin-bottom:20px;text-align:center;font-weight:600;color:#92400e">⚠️ আগে Supplier Onboarding form fill করুন!</div>`;
+    }
+  }
+  
+  const formHtml = F.sections.map(s=>`<section><h2>${s.title}</h2><div class="grid">${s.fields.map(fieldEl).join("")}</div></section>`).join("");
+  
+  // Submit button ONLY for supplier form
+  const submitBtn = id==='supplier' 
+    ? `<div class="submit-wrap"><button class="btn" type="submit">✓ Submit All Data to Excel</button><span id="m" class="msg"></span></div>`
+    : `<div style="text-align:center;padding:20px;background:#f0fdf4;border-radius:8px;margin-top:20px"><p style="margin:0;color:#15803d;font-weight:600">✓ Data auto-saved! Go to <strong>Supplier Onboarding</strong> page to submit all data.</p></div>`;
+  
+  app.innerHTML=`<div class="page-title"><h2>${F.title}</h2><p>সঠিক ও সম্পূর্ণ তথ্য প্রদান করুন</p></div>${companyInfo}<form id="f">${formHtml}${submitBtn}</form>`;
+  
+  
+  // Auto-save data on input change
+  document.querySelectorAll('#f input, #f textarea, #f select').forEach(el=>{
+    el.addEventListener('change', function(){
+      saveFormData(id);
+    });
+  });
+  
+  // Load saved data
+  loadFormData(id);
   
   // Add map link listeners for address fields
   document.querySelectorAll('textarea[data-maplink="true"]').forEach(ta=>{
@@ -179,31 +208,134 @@ function renderForm(id){
     });
   });
   document.getElementById("f").onsubmit=async e=>{
-    e.preventDefault();const m=document.getElementById("m"),data={};
+    e.preventDefault();
+    
+    // Only allow submit on supplier form
+    if(id!=='supplier'){
+      alert('Please go to Supplier Onboarding page to submit!');
+      return;
+    }
+    
+    const m=document.getElementById("m");
+    
+    // Collect data from ALL forms (supplier, contact, verification, interview)
+    const allData={};
+    
+    // Collect current form data
     F.sections.forEach(s=>s.fields.forEach(f=>{
       const els=[...e.target.querySelectorAll(`[name="${f.key}"]`)];
-      data[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
-        :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0].value;
-      // Auto-generate map link for address fields
-      if(f.maplink && data[f.key]){
-        const mapLinkKey = f.key.replace('_addr','_map_link');
-        const customMapLink = data[mapLinkKey];
-        
-        if(customMapLink && customMapLink.trim()){
-          // User provided exact map link - use that
-          data[f.key+'_final_map_link'] = customMapLink.trim();
-        }else{
-          // Auto-generate from address
-          data[f.key+'_final_map_link']=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(data[f.key])}`;
+      if(els.length===0)return;
+      allData[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
+        :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0]?els[0].value:'';
+    }));
+    
+    // Load data from other forms (saved in localStorage)
+    ['contact','verification','interview'].forEach(formKey=>{
+      const saved = localStorage.getItem('form_'+formKey);
+      if(saved){
+        try{
+          const formData = JSON.parse(saved);
+          Object.assign(allData, formData);
+        }catch(e){
+          console.error('Error loading '+formKey+' data:', e);
         }
       }
-    }));
-    try{await api("/api/submit/"+id,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(data)});
-      m.textContent="✓ সফলভাবে সংরক্ষিত হয়েছে! ধন্যবাদ।";m.className="msg ok";e.target.reset();
+    });
+    
+    // Process map links - generate from addresses
+    if(allData.factory_addr && allData.factory_addr.trim()){
+      allData.factory_map_link = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(allData.factory_addr.trim())}`;
+    }
+    if(allData.office_addr && allData.office_addr.trim()){
+      allData.office_map_link = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(allData.office_addr.trim())}`;
+    }
+    
+    // Save company name
+    if(allData.company){
+      localStorage.setItem('current_company', allData.company.trim());
+    }
+    
+    // Remove empty fields
+    Object.keys(allData).forEach(key=>{
+      if(allData[key]===''||allData[key]===null||allData[key]===undefined){
+        delete allData[key];
+      }
+    });
+    
+    console.log('Submitting ALL data:', allData);
+    
+    try{
+      const res=await api("/api/submit/supplier",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(allData)});
+      if(res.updated){
+        m.textContent="✓ আপডেট সফল! সম্পূর্ণ তথ্য আপডেট করা হয়েছে।";
+      }else{
+        m.textContent="✓ সফলভাবে সংরক্ষিত হয়েছে! সম্পূর্ণ তথ্য Excel-এ save হয়েছে।";
+      }
+      m.className="msg ok";
+      
+      // Clear all saved form data
+      ['supplier','contact','verification','interview'].forEach(fk=>{
+        localStorage.removeItem('form_'+fk);
+      });
+      
+      e.target.reset();
       e.target.querySelectorAll('input[type=date]').forEach(d=>d.value=today());
-      document.querySelectorAll('.map-preview').forEach(mp=>mp.innerHTML='');scrollTo(0,0)}
-    catch(x){m.textContent=x.message;m.className="msg err"}}
+      document.querySelectorAll('.map-preview').forEach(mp=>mp.innerHTML='');
+      scrollTo(0,0);
+    }catch(x){
+      m.textContent=x.message;
+      m.className="msg err";
+      console.error('Submit error:',x);
+    }
+  }
 }
+
+// Save form data to localStorage
+function saveFormData(formId){
+  const form = document.getElementById('f');
+  if(!form)return;
+  const data = {};
+  const F = S.forms[formId];
+  F.sections.forEach(s=>s.fields.forEach(f=>{
+    const els=[...form.querySelectorAll(`[name="${f.key}"]`)];
+    if(els.length===0)return;
+    data[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
+      :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0]?els[0].value:'';
+  }));
+  localStorage.setItem('form_'+formId, JSON.stringify(data));
+  console.log('Auto-saved:', formId, data);
+}
+
+// Load saved form data from localStorage
+function loadFormData(formId){
+  const saved = localStorage.getItem('form_'+formId);
+  if(!saved)return;
+  try{
+    const data = JSON.parse(saved);
+    Object.keys(data).forEach(key=>{
+      const els = document.querySelectorAll(`[name="${key}"]`);
+      if(els.length===0)return;
+      const el = els[0];
+      if(el.type==='checkbox'){
+        els.forEach(checkbox=>{
+          if(Array.isArray(data[key]) && data[key].includes(checkbox.value)){
+            checkbox.checked=true;
+          }
+        });
+      }else if(el.type==='radio'){
+        els.forEach(radio=>{
+          if(radio.value===data[key])radio.checked=true;
+        });
+      }else{
+        el.value=data[key]||'';
+      }
+    });
+    console.log('Loaded saved data:', formId);
+  }catch(e){
+    console.error('Error loading saved data:', e);
+  }
+}
+
 function renderAdmin(){
   const forms=Object.keys(S.forms),app=document.getElementById("app");
   app.innerHTML=`<section><h2>Add a new field</h2><p class="note">Field add korle form-e dekhabe ar Excel-e notun column auto toiri hobe.</p>
