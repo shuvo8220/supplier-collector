@@ -144,6 +144,40 @@
        "placeholder": "Example: Paper, Plastic, Aluminum"
       },
       {
+       "key": "material_source",
+       "label": "Material coming from where? / কাঁচামাল কোথা থেকে আসে?",
+       "type": "text",
+       "placeholder": "Example: China, Local, India"
+      },
+      {
+       "key": "material_quality",
+       "label": "Material quality details / কাঁচামালের মান",
+       "type": "text",
+       "placeholder": "Quality grade, specifications"
+      },
+      {
+       "key": "material_supplier_company",
+       "label": "Material supplier company name / কাঁচামাল সরবরাহকারী কোম্পানি",
+       "type": "text",
+       "placeholder": "Company name that supplies raw materials"
+      },
+      {
+       "key": "product_working_status",
+       "label": "Product working status / প্রোডাক্ট কাজ করছে কিনা?",
+       "type": "radio",
+       "options": [
+        "Working / কাজ করছে",
+        "Not Working / কাজ করছে না",
+        "Testing / টেস্টিং চলছে"
+       ]
+      },
+      {
+       "key": "product_origin",
+       "label": "Product coming from where? / প্রোডাক্ট কোথা থেকে আসে?",
+       "type": "text",
+       "placeholder": "Manufacturing location, import source"
+      },
+      {
        "key": "custom",
        "label": "Custom size / print available?",
        "type": "radio",
@@ -176,12 +210,69 @@
        "placeholder": "কত দিনে sample পাওয়া যাবে? খরচ কত?",
        "conditional": "sample",
        "showWhen": "Yes"
+      },
+      {
+       "key": "sample_type",
+       "label": "Sample Type / স্যাম্পলের ধরন",
+       "type": "text",
+       "placeholder": "Example: Prototype, Production sample, Custom",
+       "conditional": "sample",
+       "showWhen": "Yes"
+      },
+      {
+       "key": "sample_quality",
+       "label": "Sample Quality / স্যাম্পলের মান",
+       "type": "select",
+       "options": [
+        "Excellent / চমৎকার",
+        "Good / ভালো",
+        "Average / মাঝারি",
+        "Below Average / মানসম্মত নয়"
+       ],
+       "conditional": "sample",
+       "showWhen": "Yes"
+      },
+      {
+       "key": "sample_manufacture_date",
+       "label": "Sample Manufacture Date / স্যাম্পল তৈরির তারিখ",
+       "type": "date",
+       "conditional": "sample",
+       "showWhen": "Yes"
+      },
+      {
+       "key": "sample_photo_date",
+       "label": "Sample Photo Date / ছবি তোলার তারিখ",
+       "type": "date",
+       "conditional": "sample",
+       "showWhen": "Yes"
+      },
+      {
+       "key": "sample_images",
+       "label": "Sample Pictures / স্যাম্পলের ছবি (multiple)",
+       "type": "file",
+       "accept": "image/*",
+       "multiple": true,
+       "category": "sample",
+       "conditional": "sample",
+       "showWhen": "Yes"
       }
      ]
     },
     {
      "title": "Commercial / ব্যবসায়িক তথ্য",
      "fields": [
+      {
+       "key": "opening_time",
+       "label": "Opening Time / খোলার সময়",
+       "type": "text",
+       "placeholder": "Example: 9:00 AM"
+      },
+      {
+       "key": "closing_time",
+       "label": "Closing Time / বন্ধের সময়",
+       "type": "text",
+       "placeholder": "Example: 6:00 PM"
+      },
       {
        "key": "moq",
        "label": "MOQ / সর্বনিম্ন অর্ডার",
@@ -195,10 +286,38 @@
        "placeholder": "Example: 50,000 pcs/month"
       },
       {
+       "key": "capacity_per_order_max",
+       "label": "Maximum capacity per order / একটি অর্ডারে সর্বোচ্চ সরবরাহ",
+       "type": "text",
+       "placeholder": "Example: 100,000 pcs in one order"
+      },
+      {
+       "key": "capacity_per_load",
+       "label": "How many in one load? / এক লোডে কত?",
+       "type": "text",
+       "placeholder": "Example: 5000 pcs per truck"
+      },
+      {
        "key": "lead_time",
        "label": "Lead time (days) / ডেলিভারি সময়",
        "type": "number",
        "placeholder": "Days"
+      },
+      {
+       "key": "delivery_cost",
+       "label": "Delivery cost / ডেলিভারি খরচ",
+       "type": "text",
+       "placeholder": "Example: ৳500 in Dhaka, ৳1000 outside"
+      },
+      {
+       "key": "vehicle_available",
+       "label": "Vehicle available? / গাড়ি আছে?",
+       "type": "radio",
+       "options": [
+        "Yes - Own / হ্যাঁ - নিজের",
+        "Yes - Rental / হ্যাঁ - ভাড়া",
+        "No / না"
+       ]
       },
       {
        "key": "price_list",
@@ -216,6 +335,24 @@
        "placeholder": "Price list কোথায় পাওয়া যাবে? (Email, Website, etc.)",
        "conditional": "price_list",
        "showWhen": "Yes"
+      },
+      {
+       "key": "price_list_images",
+       "label": "Price List Pictures / প্রাইস লিস্টের ছবি (multiple)",
+       "type": "file",
+       "accept": "image/*,application/pdf",
+       "multiple": true,
+       "category": "price_list",
+       "conditional": "price_list",
+       "showWhen": "Yes"
+      },
+      {
+       "key": "price_range",
+       "label": "Approximate Price Range (if no price list) / আনুমানিক দাম",
+       "type": "text",
+       "placeholder": "Example: ৳10-50 per unit",
+       "conditional": "price_list",
+       "showWhen": "No"
       }
      ]
     }
@@ -408,6 +545,22 @@
      "title": "Legal Documents / আইনি ডকুমেন্ট",
      "fields": [
       {
+       "key": "tin_provided",
+       "label": "TIN / BIN provide করবেন?",
+       "type": "radio",
+       "options": [
+        "Yes / হ্যাঁ",
+        "No / না (দিতে চাই না)"
+       ]
+      },
+      {
+       "key": "tin_bin",
+       "label": "TIN / BIN Number",
+       "type": "text",
+       "conditional": "tin_provided",
+       "showWhen": "Yes / হ্যাঁ"
+      },
+      {
        "key": "trade_license",
        "label": "Trade license / ট্রেড লাইসেন্স",
        "type": "radio",
@@ -419,17 +572,30 @@
       {
        "key": "trade_license_no",
        "label": "Trade License Number",
-       "type": "text"
+       "type": "text",
+       "conditional": "trade_license",
+       "showWhen": "Yes"
       },
       {
-       "key": "tin_bin",
-       "label": "TIN / BIN",
-       "type": "text"
+       "key": "trade_license_image",
+       "label": "Trade License Image / লাইসেন্সের ছবি",
+       "type": "file",
+       "accept": "image/*,application/pdf",
+       "category": "document",
+       "conditional": "trade_license",
+       "showWhen": "Yes"
       },
       {
        "key": "bsti",
        "label": "BSTI / certificate / ফুড প্যাকেজিংয়ে জরুরি",
        "type": "text"
+      },
+      {
+       "key": "bsti_image",
+       "label": "BSTI Certificate Image / সার্টিফিকেটের ছবি",
+       "type": "file",
+       "accept": "image/*,application/pdf",
+       "category": "document"
       },
       {
        "key": "export_exp",
@@ -440,6 +606,22 @@
         "No",
         "Ready"
        ]
+      },
+      {
+       "key": "company_authenticity_verified",
+       "label": "Company authenticity verified? (Internal)",
+       "type": "radio",
+       "options": [
+        "Yes - Verified",
+        "No - Not verified",
+        "Pending"
+       ]
+      },
+      {
+       "key": "verification_notes",
+       "label": "Verification Notes (Internal)",
+       "type": "textarea",
+       "placeholder": "Details about company authenticity check"
       }
      ]
     },
@@ -456,6 +638,16 @@
        ]
       },
       {
+       "key": "product_images",
+       "label": "Upload Product Photos / প্রোডাক্টের ছবি (multiple)",
+       "type": "file",
+       "accept": "image/*",
+       "multiple": true,
+       "category": "product",
+       "conditional": "photo_product",
+       "showWhen": "Yes"
+      },
+      {
        "key": "photo_factory",
        "label": "Factory photo",
        "type": "radio",
@@ -465,6 +657,16 @@
        ]
       },
       {
+       "key": "factory_images",
+       "label": "Upload Factory Photos / কারখানার ছবি (multiple)",
+       "type": "file",
+       "accept": "image/*",
+       "multiple": true,
+       "category": "factory",
+       "conditional": "photo_factory",
+       "showWhen": "Yes"
+      },
+      {
        "key": "catalog",
        "label": "Catalog / price list",
        "type": "radio",
@@ -472,6 +674,16 @@
         "Yes",
         "Later"
        ]
+      },
+      {
+       "key": "catalog_images",
+       "label": "Upload Catalog / ক্যাটালগ (multiple PDF/images)",
+       "type": "file",
+       "accept": "image/*,application/pdf",
+       "multiple": true,
+       "category": "catalog",
+       "conditional": "catalog",
+       "showWhen": "Yes"
       }
      ]
     },

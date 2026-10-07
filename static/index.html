@@ -88,6 +88,16 @@ footer strong{color:var(--primary)}
 .row{display:flex;gap:8px;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px dashed var(--line);min-height:48px}
 .row button{background:none;border:0;color:var(--err);cursor:pointer;font:inherit;text-decoration:underline;padding:8px;min-height:44px}
 .note{color:var(--mut);font-size:14px;line-height:1.6;padding:12px;background:#f8fafc;border-radius:6px;margin-top:8px}
+.file-input{display:block;padding:12px;border:2px dashed var(--line);border-radius:10px;cursor:pointer;background:#f8fafc;transition:all 0.2s;font-size:15px}
+.file-input:hover{border-color:var(--primary);background:#e0f2fe}
+.file-preview{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px;margin-top:12px}
+.file-preview-item{position:relative;border:2px solid var(--line);border-radius:8px;overflow:hidden;background:#fff}
+.file-preview-item img{width:100%;height:120px;object-fit:cover;display:block}
+.file-preview-item .file-name{padding:8px;font-size:12px;text-align:center;word-break:break-word;background:#f8fafc}
+.file-preview-item .remove-file{position:absolute;top:4px;right:4px;background:var(--err);color:#fff;border:0;border-radius:50%;width:24px;height:24px;cursor:pointer;font-weight:bold;line-height:1;font-size:16px}
+.file-preview-item .remove-file:hover{background:#991b1b}
+.uploading{opacity:0.6;pointer-events:none}
+.upload-progress{margin-top:8px;padding:8px 12px;background:#e0f2fe;border-radius:6px;color:var(--primary);font-size:14px;font-weight:600}
 </style></head><body>
 <header><div class="header-content"><div class="brand"><div class="logo">M</div><div><h1>মহাজন</h1><div class="tagline">Supplier Registration & Management Portal</div></div></div><nav id="nav"></nav></div></header>
 <main id="app"></main>
@@ -100,22 +110,29 @@ async function api(url,opt){const r=await fetch(url,opt);const j=await r.json().
 async function load(){S=await api("/api/schema");render()}
 function render(){
   const nav=document.getElementById("nav");nav.innerHTML="";
-  [...Object.keys(S.forms).map(k=>[k,S.forms[k].title.split(" / ")[0]]),["admin","Fields (add / remove)"]].forEach(([k,t])=>{
+  [...Object.keys(S.forms).map(k=>[k,S.forms[k].title.split(" / ")[0]]),["view","View Suppliers"],["admin","Fields (add / remove)"]].forEach(([k,t])=>{
     const b=document.createElement("button");b.textContent=t;b.className=k===tab?"on":"";b.onclick=()=>{tab=k;render()};nav.appendChild(b)});
-  tab==="admin"?renderAdmin():renderForm(tab);
+  
+  tab==="admin"?renderAdmin():tab==="view"?renderView():renderForm(tab);
 }
 function fieldEl(f){
   const lab=`<label class="l">${f.star?'<span class="star">★</span> ':""}${f.label}${f.required?' <span class="req">*</span>':""}</label>`;
   let inp="";
-  if(f.type==="textarea"){
+  if(f.type==="file"){
+    // File upload input
+    inp=`<input type="file" name="${f.key}" accept="${f.accept||'image/*'}" ${f.multiple?'multiple':''} data-category="${f.category||'document'}" class="file-input" ${f.conditional?`data-conditional="${f.conditional}" data-showwhen="${f.showWhen}" style="display:none"`:''}">`;
+    inp+=`<div class="file-preview" id="preview_${f.key}" style="margin-top:10px;display:none;"></div>`;
+    inp+=`<input type="hidden" name="${f.key}_paths" id="${f.key}_paths">`;
+  }
+  else if(f.type==="textarea"){
     inp=`<textarea name="${f.key}" placeholder="${f.placeholder||''}" ${f.maplink?'data-maplink="true"':''} ${f.conditional?`data-conditional="${f.conditional}" data-showwhen="${f.showWhen}" style="display:none"`:''}></textarea>`;
     if(f.maplink)inp+=`<div class="map-preview" id="map_${f.key}" style="display:none"></div>`;
   }
-  else if(f.type==="select")inp=`<select name="${f.key}"><option value="">-- নির্বাচন করুন --</option>${f.options.map(o=>`<option>${o}</option>`).join("")}</select>`;
-  else if(f.type==="radio")inp=`<div class="opts" ${f.key.match(/custom|sample|price_list/)?`data-trigger="${f.key}"`:''}>${f.options.map(o=>`<label><input type="radio" name="${f.key}" value="${o}"><span>${o}</span></label>`).join("")}</div>`;
+  else if(f.type==="select")inp=`<select name="${f.key}" ${f.conditional?`data-conditional="${f.conditional}" data-showwhen="${f.showWhen}" style="display:none"`:''}><option value="">-- নির্বাচন করুন --</option>${f.options.map(o=>`<option>${o}</option>`).join("")}</select>`;
+  else if(f.type==="radio")inp=`<div class="opts" ${f.key.match(/custom|sample|price_list|tin_provided|photo_product|photo_factory|catalog|trade_license/)?`data-trigger="${f.key}"`:''}>${f.options.map(o=>`<label><input type="radio" name="${f.key}" value="${o}"><span>${o}</span></label>`).join("")}</div>`;
   else if(f.type==="checkbox")inp=`<div class="opts">${f.options.map(o=>`<label><input type="checkbox" name="${f.key}" value="${o}"><span>${o}</span></label>`).join("")}</div>`;
   else inp=`<input type="${["phone","whatsapp"].includes(f.key)||f.key.includes("phone")?"tel":f.type}" name="${f.key}" ${f.today?`value="${today()}"`:""} ${f.readonly?'readonly':''} placeholder="${f.placeholder||''}" ${f.conditional?`data-conditional="${f.conditional}" data-showwhen="${f.showWhen}" style="display:none"`:''}">`;
-  const wide=f.type==="textarea"||f.type==="checkbox"||f.options&&f.options.join("").length>40||f.conditional;
+  const wide=f.type==="textarea"||f.type==="checkbox"||f.type==="file"||f.options&&f.options.join("").length>40||f.conditional;
   return `<div class="fld ${wide?"wide":""}" ${f.conditional?`id="fld_${f.key}"`:''}>${lab}${inp}</div>`;
 }
 function renderForm(id){
@@ -136,7 +153,7 @@ function renderForm(id){
   
   // Submit button ONLY for supplier form
   const submitBtn = id==='supplier' 
-    ? `<div class="submit-wrap"><button class="btn" type="submit">✓ Submit All Data to Excel</button><span id="m" class="msg"></span></div>`
+    ? `<div class="submit-wrap"><button class="btn" type="submit">✓ Submit All Data</button><span id="m" class="msg"></span></div>`
     : `<div style="text-align:center;padding:20px;background:#f0fdf4;border-radius:8px;margin-top:20px"><p style="margin:0;color:#15803d;font-weight:600">✓ Data auto-saved! Go to <strong>Supplier Onboarding</strong> page to submit all data.</p></div>`;
   
   app.innerHTML=`<div class="page-title"><h2>${F.title}</h2><p>সঠিক ও সম্পূর্ণ তথ্য প্রদান করুন</p></div>${companyInfo}<form id="f">${formHtml}${submitBtn}</form>`;
@@ -147,6 +164,131 @@ function renderForm(id){
     el.addEventListener('change', function(){
       saveFormData(id);
     });
+  });
+  
+  // File upload handlers
+  document.querySelectorAll('.file-input').forEach(fileInput=>{
+    fileInput.addEventListener('change', async function(e){
+      const files = Array.from(e.target.files);
+      if(!files.length)return;
+      
+      const fieldKey = this.name;
+      const category = this.dataset.category || 'document';
+      const company = localStorage.getItem('current_company') || 'unknown';
+      const previewDiv = document.getElementById(`preview_${fieldKey}`);
+      const pathsInput = document.getElementById(`${fieldKey}_paths`);
+      
+      if(!previewDiv)return;
+      
+      previewDiv.style.display = 'block';
+      
+      // Get existing paths
+      let uploadedPaths = [];
+      try{
+        uploadedPaths = JSON.parse(pathsInput.value || '[]');
+      }catch(e){}
+      
+      // Upload each file
+      for(const file of files){
+        // Show progress
+        const progressDiv = document.createElement('div');
+        progressDiv.className = 'upload-progress';
+        progressDiv.textContent = `Uploading ${file.name}...`;
+        previewDiv.appendChild(progressDiv);
+        
+        try{
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('category', category);
+          formData.append('company', company);
+          
+          const response = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData
+          });
+          
+          const result = await response.json();
+          
+          if(result.success){
+            uploadedPaths.push(result.filepath);
+            
+            // Remove progress
+            progressDiv.remove();
+            
+            // Add preview
+            const previewItem = document.createElement('div');
+            previewItem.className = 'file-preview-item';
+            
+            if(file.type.startsWith('image/')){
+              previewItem.innerHTML = `
+                <img src="/uploads/${result.filepath.replace(/\\/g, '/')}" alt="${file.name}">
+                <div class="file-name">${result.filename}</div>
+                <button class="remove-file" data-filepath="${result.filepath}">×</button>
+              `;
+            }else{
+              previewItem.innerHTML = `
+                <div class="file-name" style="height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9">
+                  📄 ${result.filename}
+                </div>
+                <button class="remove-file" data-filepath="${result.filepath}">×</button>
+              `;
+            }
+            
+            previewDiv.appendChild(previewItem);
+            
+            // Update hidden input
+            pathsInput.value = JSON.stringify(uploadedPaths);
+            
+            // Save to localStorage
+            saveFormData(id);
+            
+          }else{
+            progressDiv.textContent = `Error: ${result.error}`;
+            progressDiv.style.background = '#fef2f2';
+            progressDiv.style.color = 'var(--err)';
+          }
+          
+        }catch(err){
+          progressDiv.textContent = `Error: ${err.message}`;
+          progressDiv.style.background = '#fef2f2';
+          progressDiv.style.color = 'var(--err)';
+        }
+      }
+      
+      // Clear file input
+      this.value = '';
+    });
+  });
+  
+  // Remove file button handlers
+  document.addEventListener('click', function(e){
+    if(e.target.classList.contains('remove-file')){
+      const filepath = e.target.dataset.filepath;
+      const previewItem = e.target.closest('.file-preview-item');
+      const previewDiv = previewItem.closest('.file-preview');
+      const fieldKey = previewDiv.id.replace('preview_', '');
+      const pathsInput = document.getElementById(`${fieldKey}_paths`);
+      
+      // Remove from paths
+      let uploadedPaths = [];
+      try{
+        uploadedPaths = JSON.parse(pathsInput.value || '[]');
+        uploadedPaths = uploadedPaths.filter(p => p !== filepath);
+        pathsInput.value = JSON.stringify(uploadedPaths);
+      }catch(e){}
+      
+      // Remove preview
+      previewItem.remove();
+      
+      // Hide preview div if empty
+      if(previewDiv.children.length === 0){
+        previewDiv.style.display = 'none';
+      }
+      
+      // Save to localStorage
+      const formId = tab;
+      saveFormData(formId);
+    }
   });
   
   // Load saved data
@@ -225,6 +367,20 @@ function renderForm(id){
     F.sections.forEach(s=>s.fields.forEach(f=>{
       const els=[...e.target.querySelectorAll(`[name="${f.key}"]`)];
       if(els.length===0)return;
+      
+      // Handle file upload fields
+      if(f.type==='file'){
+        const pathsInput = document.getElementById(`${f.key}_paths`);
+        if(pathsInput && pathsInput.value){
+          try{
+            allData[f.key] = JSON.parse(pathsInput.value);
+          }catch(err){
+            allData[f.key] = [];
+          }
+        }
+        return;
+      }
+      
       allData[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
         :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0]?els[0].value:'';
     }));
@@ -269,7 +425,7 @@ function renderForm(id){
       if(res.updated){
         m.textContent="✓ আপডেট সফল! সম্পূর্ণ তথ্য আপডেট করা হয়েছে।";
       }else{
-        m.textContent="✓ সফলভাবে সংরক্ষিত হয়েছে! সম্পূর্ণ তথ্য Excel-এ save হয়েছে।";
+        m.textContent="✓ সফলভাবে সংরক্ষিত হয়েছে! সম্পূর্ণ তথ্য ডাটাবেসে save হয়েছে।";
       }
       m.className="msg ok";
       
@@ -299,6 +455,20 @@ function saveFormData(formId){
   F.sections.forEach(s=>s.fields.forEach(f=>{
     const els=[...form.querySelectorAll(`[name="${f.key}"]`)];
     if(els.length===0)return;
+    
+    // Handle file upload fields
+    if(f.type==='file'){
+      const pathsInput = document.getElementById(`${f.key}_paths`);
+      if(pathsInput && pathsInput.value){
+        try{
+          data[f.key] = JSON.parse(pathsInput.value);
+        }catch(e){
+          data[f.key] = [];
+        }
+      }
+      return;
+    }
+    
     data[f.key]=f.type==="checkbox"?els.filter(x=>x.checked).map(x=>x.value)
       :f.type==="radio"?(els.find(x=>x.checked)||{}).value||"":els[0]?els[0].value:'';
   }));
@@ -315,7 +485,50 @@ function loadFormData(formId){
     Object.keys(data).forEach(key=>{
       const els = document.querySelectorAll(`[name="${key}"]`);
       if(els.length===0)return;
+      
       const el = els[0];
+      
+      // Handle file upload fields
+      if(el && el.type==='file'){
+        const pathsInput = document.getElementById(`${key}_paths`);
+        const previewDiv = document.getElementById(`preview_${key}`);
+        
+        if(pathsInput && Array.isArray(data[key]) && data[key].length > 0){
+          pathsInput.value = JSON.stringify(data[key]);
+          
+          if(previewDiv){
+            previewDiv.style.display = 'block';
+            previewDiv.innerHTML = '';
+            
+            data[key].forEach(filepath=>{
+              const filename = filepath.split(/[\\\/]/).pop();
+              const isImage = /\.(jpg|jpeg|png|gif|webp)$/i.test(filename);
+              
+              const previewItem = document.createElement('div');
+              previewItem.className = 'file-preview-item';
+              
+              if(isImage){
+                previewItem.innerHTML = `
+                  <img src="/uploads/${filepath.replace(/\\/g, '/')}" alt="${filename}">
+                  <div class="file-name">${filename}</div>
+                  <button class="remove-file" data-filepath="${filepath}">×</button>
+                `;
+              }else{
+                previewItem.innerHTML = `
+                  <div class="file-name" style="height:120px;display:flex;align-items:center;justify-content:center;background:#f1f5f9">
+                    📄 ${filename}
+                  </div>
+                  <button class="remove-file" data-filepath="${filepath}">×</button>
+                `;
+              }
+              
+              previewDiv.appendChild(previewItem);
+            });
+          }
+        }
+        return;
+      }
+      
       if(el.type==='checkbox'){
         els.forEach(checkbox=>{
           if(Array.isArray(data[key]) && data[key].includes(checkbox.value)){
@@ -338,7 +551,7 @@ function loadFormData(formId){
 
 function renderAdmin(){
   const forms=Object.keys(S.forms),app=document.getElementById("app");
-  app.innerHTML=`<section><h2>Add a new field</h2><p class="note">Field add korle form-e dekhabe ar Excel-e notun column auto toiri hobe.</p>
+  app.innerHTML=`<section><h2>Add a new field</h2><p class="note">Field add korle form-e dekhabe ar database-e save hobe.</p>
   <div class="grid">
    <div><label class="l">Form</label><select id="af">${forms.map(k=>`<option value="${k}">${S.forms[k].title}</option>`).join("")}</select></div>
    <div><label class="l">Section</label><select id="as"></select></div>
@@ -347,14 +560,83 @@ function renderAdmin(){
    <div><label class="l">Options (comma diye)</label><input type="text" id="ao" placeholder="Yes, No"></div>
    <div class="opts"><label><input type="checkbox" id="ar"> Required</label><label><input type="checkbox" id="as2"> ★ First visit</label></div>
   </div><p><button class="btn" id="add">Add field</button><span id="m" class="msg"></span></p></section>
-  <section><h2>Current fields</h2><div id="list"></div></section>
-  <a class="btn alt" href="/api/download" style="text-decoration:none;display:inline-block">Download Excel</a>`;
+  <section><h2>Current fields</h2><div id="list"></div></section>`;
   const af=document.getElementById("af"),as=document.getElementById("as");
   const secs=()=>{as.innerHTML=S.forms[af.value].sections.map((s,i)=>`<option value="${i}">${s.title}</option>`).join("");list()};
   const list=()=>{document.getElementById("list").innerHTML=S.forms[af.value].sections.map(s=>
     `<b>${s.title}</b>`+s.fields.map(f=>`<div class="row"><span>${f.label} <span class="note">(${f.type})</span></span><button data-k="${f.key}">Remove</button></div>`).join("")).join("<br>");
     document.querySelectorAll("#list button").forEach(b=>b.onclick=async()=>{
-      if(!confirm("Form theke remove hobe (Excel-er purono data thakbe)."))return;
+      if(!confirm("Form theke remove hobe (database-er purono data thakbe)."))return;
+      await api(`/api/field/${af.value}/${b.dataset.k}`,{method:"DELETE"});await load2()})};
+  const load2=async()=>{S=await api("/api/schema");list()};
+  af.onchange=secs;secs();
+  document.getElementById("add").onclick=async()=>{
+    const m=document.getElementById("m");
+    try{const r=await api("/api/field",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      form:af.value,section:as.value,label:document.getElementById("al").value,type:document.getElementById("at").value,
+      options:document.getElementById("ao").value,required:document.getElementById("ar").checked,star:document.getElementById("as2").checked})});
+      m.textContent=r.warning||"Added ✓";m.className="msg ok";document.getElementById("al").value="";await load2()}
+    catch(x){m.textContent=x.message;m.className="msg err"}}
+}
+
+async function renderView(){
+  const app=document.getElementById("app");
+  app.innerHTML=`<div class="page-title"><h2>📋 Supplier Database</h2><p>All submitted suppliers</p></div><section><div id="suppliers-list">Loading...</div></section>`;
+  
+  try{
+    const response = await api('/api/suppliers');
+    const suppliers = response.suppliers || [];
+    
+    const listDiv = document.getElementById('suppliers-list');
+    
+    if(suppliers.length === 0){
+      listDiv.innerHTML = `<p style="text-align:center;color:var(--mut);padding:40px">No suppliers yet. Start by filling the Supplier Onboarding form!</p>`;
+      return;
+    }
+    
+    listDiv.innerHTML = `
+      <div style="display:grid;gap:16px">
+        ${suppliers.map(s=>`
+          <div style="padding:16px;background:#f8fafc;border:2px solid var(--line);border-radius:12px;cursor:pointer;transition:all 0.2s" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--line)'" onclick="viewSupplier('${s._id}')">
+            <div style="display:flex;justify-content:space-between;align-items:start;gap:16px">
+              <div>
+                <h3 style="margin:0 0 8px;color:var(--primary);font-size:18px">${s.company || 'N/A'}</h3>
+                <p style="margin:4px 0;color:var(--mut);font-size:14px">
+                  <strong>Business Type:</strong> ${s.business_type || 'N/A'}<br>
+                  <strong>Collected by:</strong> ${s.collected_by || 'N/A'}<br>
+                  <strong>Date:</strong> ${s.date || 'N/A'}
+                </p>
+              </div>
+              <button class="btn alt" style="padding:8px 16px;min-height:auto" onclick="event.stopPropagation();window.location.href='/api/supplier/${s._id}'">View Details</button>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+    
+  }catch(e){
+    document.getElementById('suppliers-list').innerHTML = `<p style="color:var(--err);text-align:center">Error loading suppliers: ${e.message}</p>`;
+  }
+}
+
+function renderAdmin(){
+  const forms=Object.keys(S.forms),app=document.getElementById("app");
+  app.innerHTML=`<section><h2>Add a new field</h2><p class="note">Field add korle form-e dekhabe ar database-e save hobe.</p>
+  <div class="grid">
+   <div><label class="l">Form</label><select id="af">${forms.map(k=>`<option value="${k}">${S.forms[k].title}</option>`).join("")}</select></div>
+   <div><label class="l">Section</label><select id="as"></select></div>
+   <div class="fld wide"><label class="l">Label (question / field name)</label><input type="text" id="al"></div>
+   <div><label class="l">Type</label><select id="at"><option value="text">Short text</option><option value="textarea">Long text</option><option value="number">Number</option><option value="date">Date</option><option value="radio">Single choice</option><option value="checkbox">Multiple choice</option><option value="select">Dropdown</option></select></div>
+   <div><label class="l">Options (comma diye)</label><input type="text" id="ao" placeholder="Yes, No"></div>
+   <div class="opts"><label><input type="checkbox" id="ar"> Required</label><label><input type="checkbox" id="as2"> ★ First visit</label></div>
+  </div><p><button class="btn" id="add">Add field</button><span id="m" class="msg"></span></p></section>
+  <section><h2>Current fields</h2><div id="list"></div></section>`;
+  const af=document.getElementById("af"),as=document.getElementById("as");
+  const secs=()=>{as.innerHTML=S.forms[af.value].sections.map((s,i)=>`<option value="${i}">${s.title}</option>`).join("");list()};
+  const list=()=>{document.getElementById("list").innerHTML=S.forms[af.value].sections.map(s=>
+    `<b>${s.title}</b>`+s.fields.map(f=>`<div class="row"><span>${f.label} <span class="note">(${f.type})</span></span><button data-k="${f.key}">Remove</button></div>`).join("")).join("<br>");
+    document.querySelectorAll("#list button").forEach(b=>b.onclick=async()=>{
+      if(!confirm("Form theke remove hobe (database-er purono data thakbe)."))return;
       await api(`/api/field/${af.value}/${b.dataset.k}`,{method:"DELETE"});await load2()})};
   const load2=async()=>{S=await api("/api/schema");list()};
   af.onchange=secs;secs();
